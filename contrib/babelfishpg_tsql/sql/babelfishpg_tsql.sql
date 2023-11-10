@@ -703,6 +703,15 @@ $$
 LANGUAGE 'pltsql';
 GRANT ALL on PROCEDURE sys.sp_describe_first_result_set TO PUBLIC;
 
+/* This helper function would only be useful and strictly be used during 1.x to 2.3 upgrade. */
+CREATE OR REPLACE FUNCTION sys.babelfish_update_server_collation_name() RETURNS VOID
+LANGUAGE C
+AS 'babelfishpg_common', 'babelfish_update_server_collation_name';
+
+SELECT sys.babelfish_update_server_collation_name();
+
+DROP FUNCTION sys.babelfish_update_server_collation_name();
+
 CREATE OR REPLACE VIEW sys.spt_tablecollations_view AS
     SELECT
         o.object_id         AS object_id,
