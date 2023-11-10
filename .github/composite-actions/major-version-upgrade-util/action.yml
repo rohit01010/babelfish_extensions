@@ -32,8 +32,8 @@ runs:
         pg_new_dir: ${{ inputs.pg_new_dir }}
 
     - uses: actions/checkout@v2
-        with: 
-          ref: Testing-4519
+      with: 
+        ref: "Testing-4519"
 
     - name: Run pg_upgrade
       id: run-pg_upgrade
