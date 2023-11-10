@@ -5156,7 +5156,6 @@ CREATE OR REPLACE VIEW sys.spt_tablecollations_view AS
     WHERE
         c.is_sparse = 0 AND p.attnum >= 0;
 
-CALL sys.babelfish_update_collation_to_default('sys', 'spt_tablecollations_view', 'name');
 CALL sys.babelfish_update_collation_to_default('sys', 'spt_tablecollations_view', 'collation_28');
 CALL sys.babelfish_update_collation_to_default('sys', 'spt_tablecollations_view', 'collation_90');
 CALL sys.babelfish_update_collation_to_default('sys', 'spt_tablecollations_view', 'collation_100');
