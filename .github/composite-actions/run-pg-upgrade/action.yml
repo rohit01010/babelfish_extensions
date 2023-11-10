@@ -41,4 +41,6 @@ runs:
         sudo ~/${{ inputs.pg_new_dir }}/bin/psql -d jdbc_testdb -U runner -c "SELECT pg_reload_conf();"
         export PATH=/opt/mssql-tools/bin:$PATH
         sqlcmd -S localhost -U jdbc_user -P 12345678 -Q "SELECT @@version GO"
+        echo "Following is attcollation after major upgrade"
+        sudo ~/${{ inputs.install_dir }}/bin/psql -d jdbc_testdb -U runner -c "select a.attname as attname, c.relname as relname, a.attcollation as attcollation from pg_attribute as a JOIN pg_class as c ON c.oid = a.attrelid and a.attname='name' and c.relname='spt_tablecollations_view';"
       shell: bash
