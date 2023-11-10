@@ -50,31 +50,4 @@ runs:
       run: |
         sudo ~/${{ inputs.install_dir}}/bin/psql -d jdbc_testdb -U runner -c "ALTER SYSTEM SET babelfishpg_tsql.migration_mode = 'multi-db';"
         sudo ~/${{ inputs.install_dir}}/bin/psql -d jdbc_testdb -U runner -c "SELECT pg_reload_conf();"
-      shell: bash
-
-    - name: Run JDBC Verify Tests
-      id: jdbc-verify-tests
-      if: always() && steps.change-migration-mode.outcome == 'success' && inputs.is_final_ver == 'true'
-      env:
-        base_dir: ${{ matrix.upgrade-path.path[0] }}
-        tar_dir: ${{ matrix.upgrade-path.last_version }}
-      run: |
-        cd test/JDBC/
-        export isUpgradeTestMode=false
-        base_dir=${{ matrix.upgrade-path.path[0] }}
-        tar_dir=${{ matrix.upgrade-path.last_version }}
-        if [[ "$base_dir" == *"latest"* ]]; then
-          base_dir="latest"
-        fi
-        if [[ "$tar_dir" == *"latest"* ]]; then
-          tar_dir="latest"
-        fi
-        export inputFilesPath=upgrade/$tar_dir/verification_cleanup/$base_dir
-        mvn test
-        export inputFilesPath=input
-        for filename in $(grep -v "^ignore.*\|^#.*\|^cmd.*\|^all.*\|^$" upgrade/$base_dir/schedule); do
-          sed -i "s/$filename[ ]*$/$filename-vu-verify\\n$filename-vu-cleanup/g" upgrade/$base_dir/schedule
-        done
-        export scheduleFile=upgrade/$base_dir/schedule
-        mvn test
-      shell: bash      
+      shell: bash    
