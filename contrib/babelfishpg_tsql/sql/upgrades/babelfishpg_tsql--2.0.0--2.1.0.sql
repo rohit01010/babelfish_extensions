@@ -3745,7 +3745,7 @@ CREATE OR REPLACE VIEW sys.spt_tablecollations_view AS
 		o.schema_id         AS schema_id,
 		c.column_id         AS colid,
 		CASE WHEN p.attoptions[1] LIKE 'bbf_original_name=%' THEN split_part(p.attoptions[1], '=', 2)
-			ELSE c.name COLLATE sys.database_default END AS name,
+			ELSE c.name END COLLATE sys.database_default AS name,
 		CAST(CollationProperty(c.collation_name,'tdscollation') AS binary(5)) AS tds_collation_28,
 		CAST(CollationProperty(c.collation_name,'tdscollation') AS binary(5)) AS tds_collation_90,
 		CAST(CollationProperty(c.collation_name,'tdscollation') AS binary(5)) AS tds_collation_100,
