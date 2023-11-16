@@ -12,6 +12,18 @@ SELECT sys.babelfish_update_server_collation_name();
 
 DROP FUNCTION sys.babelfish_update_server_collation_name();
 
+-- reset babelfishpg_tsql.restored_server_collation_name GUC
+do
+language plpgsql
+$$
+    declare
+        query text;
+    begin
+        query := pg_catalog.format('alter database %s reset babelfishpg_tsql.restored_server_collation_name', CURRENT_DATABASE());
+        execute query;
+    end;
+$$;
+
 -- Created to to fetch default collation Oid which is being used to set collation of system objects
 CREATE OR REPLACE FUNCTION sys.babelfishpg_tsql_get_babel_server_collation_oid() RETURNS OID
 LANGUAGE C
