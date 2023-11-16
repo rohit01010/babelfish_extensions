@@ -31,6 +31,10 @@ runs:
         extension_branch: ${{ inputs.extension_branch }}
         pg_new_dir: ${{ inputs.pg_new_dir }}
 
+    - uses: actions/checkout@v2
+      with: 
+        ref: "Test-4519"
+
     - name: Run pg_upgrade
       id: run-pg_upgrade
       if: always() && steps.setup-new-version.outcome == 'success'
@@ -39,6 +43,8 @@ runs:
         migration_mode: ${{ inputs.migration_mode }}
         pg_old_dir: ${{ inputs.pg_old_dir }}
         pg_new_dir: ${{ inputs.pg_new_dir }}
+
+    - uses: actions/checkout@v2
 
     - name: Run Verify Tests
       if: always() && steps.run-pg_upgrade.outcome == 'success' && inputs.is_final_ver == 'true'
