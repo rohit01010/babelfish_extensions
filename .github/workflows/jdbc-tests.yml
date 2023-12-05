@@ -126,7 +126,7 @@ jobs:
           mv "$timestamp"_runSummary.log ~/${{ matrix.server_collation }}/run-summary.log
       
       - name: Upload Run Summary 
-        if: always() && steps.test-file-rename == 'success'
+        if: always() && steps.jdbc.outcome == 'failure'
         uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.server_collation }}
