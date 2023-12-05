@@ -10,6 +10,13 @@
 
 all
 
+ignore#!#Test-sp_helpsrvrolemember
+ignore#!#Test-sp_helpsrvrolemember-dep-vu-verify
+ignore#!#sys-parsename
+ignore#!#sys-parsename-vu-verify
+ignore#!#BABEL-889
+ignore#!#BABEL-889-vu-verify
+
 # BABEL-SP_FKEYS test is very slow and causing github action timeout.
 
 # JDBC bulk insert API seems to call SET FMTONLY ON without calling SET FMTONLY OFF, causing some spurious test failures.

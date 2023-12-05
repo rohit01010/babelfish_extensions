@@ -319,6 +319,8 @@ GO
 
 CREATE DATABASE db_unsupported9 COLLATE Arabic_CI_AS;
 GO
+DROP DATABASE db_unsupported9;
+GO
 
 SELECT set_config('babelfishpg_tsql.escape_hatch_database_misc_options', 'strict', 'false')
 GO
@@ -350,6 +352,8 @@ CREATE DATABASE db_unsupported8 COLLATE SQL_Latin1_General_CP1_CI_AS;
 GO
 
 CREATE DATABASE db_unsupported9 COLLATE Arabic_CI_AS;
+GO
+DROP DATABASE db_unsupported9;
 GO
 
 SELECT set_config('babelfishpg_tsql.escape_hatch_database_misc_options', 'ignore', 'false')
