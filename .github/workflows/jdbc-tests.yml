@@ -120,14 +120,14 @@ jobs:
         run: |
           cd test/JDBC/Info
           timestamp=`ls -Art | tail -n 1`
-          mkdir ${{ matrix.server_collation }}
+          mkdir -p ~/${{ matrix.server_collation }}
           cd $timestamp
-          mv $timestamp.diff ../${{ matrix.server_collation }}/output-diff.diff
-          mv "$timestamp"_runSummary.log ../${{ matrix.server_collation }}/run-summary.log
+          mv $timestamp.diff ~/${{ matrix.server_collation }}/output-diff.diff
+          mv "$timestamp"_runSummary.log ~/${{ matrix.server_collation }}/run-summary.log
       
       - name: Upload Run Summary 
         if: always() && steps.test-file-rename == 'success'
         uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.server_collation }}
-          path: test/JDBC/Info/${{ matrix.server_collation }}
+          path: ~/${{ matrix.server_collation }}
