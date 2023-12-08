@@ -10,7 +10,7 @@
 
 all
 
-ignore#!#babel_databasepropertyex
+ignore#!#babel_datatype
 ignore#!#Test-sp_helpsrvrolemember
 ignore#!#Test-sp_helpsrvrolemember-dep-vu-verify
 ignore#!#sys-parsename
