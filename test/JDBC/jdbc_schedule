@@ -10,13 +10,8 @@
 
 all
 
-ignore#!#babel_datatype
 ignore#!#Test-sp_helpsrvrolemember
 ignore#!#Test-sp_helpsrvrolemember-dep-vu-verify
-ignore#!#sys-parsename
-ignore#!#sys-parsename-vu-verify
-ignore#!#BABEL-889
-ignore#!#BABEL-889-vu-verify
 
 # BABEL-SP_FKEYS test is very slow and causing github action timeout.
 
