@@ -8,20 +8,23 @@ jobs:
       matrix:
         server_collation: [
           "arabic_ci_as",
-          "bbf_unicode_general_pref_cs_as",
-          "bbf_unicode_pref_cp1250_cs_as",
-          "bbf_unicode_pref_cp1251_cs_as",
-          "bbf_unicode_pref_cp1253_cs_as",
-          "bbf_unicode_pref_cp1254_cs_as",
-          "bbf_unicode_pref_cp1255_cs_as",
-          "bbf_unicode_pref_cp1256_cs_as",
-          "bbf_unicode_pref_cp1257_cs_as",
-          "bbf_unicode_pref_cp1258_cs_as",
-          "bbf_unicode_pref_cp1_cs_as",
-          "bbf_unicode_pref_cp874_cs_as",
           "chinese_prc_ci_as",
+          "cyrillic_general_ci_as",
+          "estonian_ci_as",
+          "finnish_swedish_ci_as",
+          "french_ci_as",
+          "greek_ci_as",
+          "hebrew_ci_as",
           "japanese_ci_as",
-          "korean_wansung_ci_as"
+          "korean_wansung_ci_as",
+          "modern_spanish_ci_as",
+          "mongolian_ci_as",
+          "polish_ci_as",
+          "thai_ci_as",
+          "traditional_spanish_ci_as",
+          "turkish_ci_as",
+          "ukrainian_ci_as",
+          "vietnamese_ci_as",
         ]
     env:
       INSTALL_DIR: psql
