@@ -140,6 +140,18 @@ GO
 Select * from testing4 where c3 LIKE (select c3 from testing4 where c3 NOT LIKE 'jo%' AND c3 NOT LIKE 'ä%');
 GO
 
+select c2 from testing4 where c2 NOT LIKE 'jo%' AND c2 NOT LIKE 'ä%'
+GO
+
+select c2 from testing4 where c2 not like 'jo%'
+GO
+
+select c2 from testing4 where c2 not like 'ab%'
+GO
+
+select c2 from testing4 where c2 not like 'ab%'
+go
+
 select c3 from testing4 where c3 NOT LIKE 'jo%' AND c3 NOT LIKE 'ä%'
 GO
 
