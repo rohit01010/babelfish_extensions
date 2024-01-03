@@ -81,13 +81,7 @@ jobs:
           cd $timestamp
           mv $timestamp.diff ~/${{ matrix.server_collation }}/output-diff.diff
           mv "$timestamp"_runSummary.log ~/${{ matrix.server_collation }}/run-summary.log
-          mkdir -p ~/${{ matrix.server_collation }}/failed-testscript-outputs
-          for f in $(grep "[A-Za-z_\-]*:[ ]*Failed" $timestamp"_runSummary.log" | cut -d ":" -f 1); 
-          do 
-            if [[ -f ../../output/$f".out" ]]; then
-              cp ../../output/$f".out" ~/${{ matrix.server_collation }}/failed-testscript-outputs/$f".out"
-            fi
-          done
+          mv ../output ~/${{ matrix.server_collation }}/
       
       - name: Upload Run Summary 
         if: always() && steps.jdbc.outcome == 'failure'
