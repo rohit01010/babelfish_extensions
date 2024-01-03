@@ -81,7 +81,7 @@ jobs:
           cd $timestamp
           mv $timestamp.diff ~/${{ matrix.server_collation }}/output-diff.diff
           mv "$timestamp"_runSummary.log ~/${{ matrix.server_collation }}/run-summary.log
-          mv ../output ~/${{ matrix.server_collation }}/
+          mv ../../output ~/${{ matrix.server_collation }}/
       
       - name: Upload Run Summary 
         if: always() && steps.jdbc.outcome == 'failure'
