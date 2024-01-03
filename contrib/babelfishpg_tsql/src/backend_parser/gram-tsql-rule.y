@@ -33,11 +33,11 @@ tsql_CreateLoginStmt:
 											@1)); /* Must be first */
 					n->options = lappend(n->options,
 										 makeDefElem("createdb",
-													 (Node *)makeBoolean(true),
+													 (Node *)makeBoolean(false),
 													 @1));
 					n->options = lappend(n->options,
 										 makeDefElem("createrole",
-													 (Node *)makeBoolean(true),
+													 (Node *)makeBoolean(false),
 													 @1));
 					n->options = lappend(n->options,
 										 makeDefElem("inherit",
@@ -64,11 +64,11 @@ tsql_CreateLoginStmt:
 											@1)); /* Must be first */
 					n->options = lappend(n->options,
 										 makeDefElem("createdb",
-													 (Node *)makeBoolean(true),
+													 (Node *)makeBoolean(false),
 													 @1));
 					n->options = lappend(n->options,
 										 makeDefElem("createrole",
-													 (Node *)makeBoolean(true),
+													 (Node *)makeBoolean(false),
 													 @1));
 					n->options = lappend(n->options,
 										 makeDefElem("inherit",
@@ -2055,6 +2055,27 @@ func_expr_common_subexpr:
 			| TSQL_CONTAINS '(' ColId ',' tsql_contains_search_condition ')'
 				{
 					$$ = TsqlExpressionContains($3, $5, yyscanner);
+				}
+			| TSQL_LOG '(' a_expr ')'
+				{
+					$$ = (Node *) makeFuncCall(TsqlSystemFuncName2("bbf_log"),
+											   list_make1($3),
+											   COERCE_EXPLICIT_CALL,
+											   @1);
+				}
+			| TSQL_LOG '(' a_expr ',' a_expr ')'
+				{
+					$$ = (Node *) makeFuncCall(TsqlSystemFuncName2("bbf_log"),
+											   list_make2($3, $5),
+											   COERCE_EXPLICIT_CALL,
+											   @1);
+				}
+			| TSQL_LOG10 '(' a_expr ')'
+				{
+					$$ = (Node *) makeFuncCall(TsqlSystemFuncName2("bbf_log10"),
+											   list_make1($3),
+											   COERCE_EXPLICIT_CALL,
+											   @1);
 				}
 		;
 
@@ -4583,6 +4604,8 @@ reserved_keyword:
 			| TSQL_DATENAME
 			| TSQL_DATEPART
 			| TSQL_DATETRUNC
+			| TSQL_LOG
+			| TSQL_LOG10
 			| TSQL_IIF
 			| TSQL_OUT
 			| TSQL_OUTER
