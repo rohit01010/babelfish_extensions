@@ -137,8 +137,21 @@ Select * from testing4 where c1 LIKE (select c1 from testing4 where c1 LIKE 'Abc
 GO
 Select * from testing4 where c2 NOT LIKE (select c2 from testing4 where c2 NOT LIKE 'jo%' AND c2 NOT LIKE 'ä%');
 GO
-Select * from testing4 where c3 LIKE (select c3 from testing4 where c3 NOT LIKE'jo%' AND c3 NOT LIKE 'ä%');
+Select * from testing4 where c3 LIKE (select c3 from testing4 where c3 NOT LIKE 'jo%' AND c3 NOT LIKE 'ä%');
 GO
+
+select c3 from testing4 where c3 NOT LIKE 'jo%' AND c3 NOT LIKE 'ä%'
+GO
+
+select c3 from testing4 where c3 not like 'jo%'
+GO
+
+select c3 from testing4 where c3 not like 'ab%'
+GO
+
+select c3 from testing4 where c3 not like 'ab%'
+go
+
 with p1 as (select c1 from testing4 where c1 LIKE '__Ć_'),
 p2 as (select c3 from testing4 where c3 LIKE 'äƀ__')
 select * from p1 union all select * from p2;
