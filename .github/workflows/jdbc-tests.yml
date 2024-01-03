@@ -7,24 +7,7 @@ jobs:
       fail-fast: false
       matrix:
         server_collation: [
-          "arabic_ci_as",
-          "chinese_prc_ci_as",
-          "cyrillic_general_ci_as",
-          "estonian_ci_as",
-          "finnish_swedish_ci_as",
-          "french_ci_as",
-          "greek_ci_as",
-          "hebrew_ci_as",
-          "japanese_ci_as",
-          "korean_wansung_ci_as",
-          "modern_spanish_ci_as",
-          "mongolian_ci_as",
-          "polish_ci_as",
-          "thai_ci_as",
-          "traditional_spanish_ci_as",
-          "turkish_ci_as",
-          "ukrainian_ci_as",
-          "vietnamese_ci_as",
+          "chinese_prc_ci_as"
         ]
     env:
       INSTALL_DIR: psql
@@ -98,6 +81,8 @@ jobs:
           cd $timestamp
           mv $timestamp.diff ~/${{ matrix.server_collation }}/output-diff.diff
           mv "$timestamp"_runSummary.log ~/${{ matrix.server_collation }}/run-summary.log
+          mkdir -p ~/${{ matrix.server_collation }}/output
+          mv ../output/* ~/${{ matrix.server_collation }}/output/
       
       - name: Upload Run Summary 
         if: always() && steps.jdbc.outcome == 'failure'

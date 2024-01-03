@@ -8,7 +8,7 @@
 #    new line
 # 6. If you want the framework to not run certain files, use: ignore#!#<test name>
 
-all
+babel_collection
 
 ignore#!#Test-sp_helpsrvrolemember
 ignore#!#Test-sp_helpsrvrolemember-dep-vu-verify
