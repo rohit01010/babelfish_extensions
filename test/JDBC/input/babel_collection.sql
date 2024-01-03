@@ -149,7 +149,7 @@ GO
 select c2 from testing4 where c2 not like 'ab%'
 GO
 
-select c2 from testing4 where c2 not like 'ab%'
+select c2 from testing4 where c2 not like 'a%'
 go
 
 select c3 from testing4 where c3 NOT LIKE 'jo%' AND c3 NOT LIKE 'ä%'
@@ -161,7 +161,7 @@ GO
 select c3 from testing4 where c3 not like 'ab%'
 GO
 
-select c3 from testing4 where c3 not like 'ab%'
+select c3 from testing4 where c3 not like 'a%'
 go
 
 with p1 as (select c1 from testing4 where c1 LIKE '__Ć_'),
