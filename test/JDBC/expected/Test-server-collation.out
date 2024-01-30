@@ -1,0 +1,7 @@
+SELECT CAST(SERVERPROPERTY('collation') as VARCHAR(50))
+GO
+~~START~~
+varchar
+sql_latin1_general_cp1_ci_as
+~~END~~
+
