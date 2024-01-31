@@ -1,7 +1,0 @@
-SELECT CAST(SERVERPROPERTY('collation') as VARCHAR(50))
-GO
-~~START~~
-varchar
-japanese_ci_as
-~~END~~
-
