@@ -1,4 +1,5 @@
-INSERT INTO BABEL_3147_before_14_5_vu_prepare_t_1 VALUES(1)
+-- error should not have been thrown, should be fixed under BABEL-1710
+INSERT INTO BABEL_3147_vu_prepare_t_1 VALUES(1)
 GO
 
 -- error should not have been thrown, should be fixed under BABEL-1710
