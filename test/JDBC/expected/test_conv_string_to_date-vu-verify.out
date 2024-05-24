@@ -3877,3 +3877,52 @@ date
 
 ~~ERROR (Message: Explicit conversion from data type integer to date is not allowed.)~~
 
+
+SELECT * FROM test_conv_string_to_date_v9
+GO
+~~START~~
+date
+2017-08-25
+~~END~~
+
+EXEC test_conv_string_to_date_p9
+GO
+~~START~~
+date
+2017-08-25
+~~END~~
+
+SELECT test_conv_string_to_date_f9()
+GO
+~~START~~
+date
+2017-08-25
+~~END~~
+
+
+SELECT * FROM test_conv_string_to_date_v10
+GO
+~~START~~
+date
+~~ERROR (Code: 33557097)~~
+
+~~ERROR (Message: The input character string does not follow style 130, either change the input character string or use a different style.)~~
+
+
+SELECT * FROM test_conv_string_to_date_v11
+GO
+~~START~~
+date
+~~ERROR (Code: 33557097)~~
+
+~~ERROR (Message: The input character string does not follow style 130, either change the input character string or use a different style.)~~
+
+
+SELECT * FROM test_conv_string_to_date_v12
+GO
+~~START~~
+date
+~~ERROR (Code: 33557097)~~
+
+~~ERROR (Message: Explicit conversion from data type integer to date is not allowed.)~~
+
