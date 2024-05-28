@@ -105,3 +105,16 @@ GO
 
 CREATE VIEW test_conv_string_to_date_v12 as (SELECT CONVERT(date, CAST('20' as INTEGER)));
 GO
+
+SELECT * FROM test_conv_string_to_date_v10
+GO
+
+SELECT * FROM test_conv_string_to_date_v11
+GO
+
+-- psql
+select definition from pg_views where viewname like 'test_conv_string_to_date_v10';
+GO
+
+select definition from pg_views where viewname like 'test_conv_string_to_date_v11';
+GO

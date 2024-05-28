@@ -1479,3 +1479,10 @@ GO
 
 SELECT * FROM test_conv_string_to_date_v12
 GO
+
+-- psql
+select definition from pg_views where viewname like 'test_conv_string_to_date_v10';
+GO
+
+select definition from pg_views where viewname like 'test_conv_string_to_date_v11';
+GO

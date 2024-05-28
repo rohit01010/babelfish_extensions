@@ -3924,3 +3924,20 @@ date
 
 ~~ERROR (Message: Explicit conversion from data type integer to date is not allowed.)~~
 
+
+-- psql
+select definition from pg_views where viewname like 'test_conv_string_to_date_v10';
+GO
+~~START~~
+text
+ SELECT sys.babelfish_conv_helper_to_date('02-03-2003 11:11:11 +11:11'::sys."varchar", false, (130)::numeric) AS babelfish_conv_helper_to_date;
+~~END~~
+
+
+select definition from pg_views where viewname like 'test_conv_string_to_date_v11';
+GO
+~~START~~
+text
+ SELECT sys.babelfish_conv_helper_to_date('02-03-2003 11:11:11 +11:11'::sys."varchar"(100), false, (130)::numeric) AS babelfish_conv_helper_to_date;
+~~END~~
+
