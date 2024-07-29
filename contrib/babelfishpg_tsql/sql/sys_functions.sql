@@ -3271,7 +3271,7 @@ BEGIN
     END IF;
 
     -- restricting arguments with invalid datatypes for trim function
-    IF string_arg_datatype NOT IN ('char', 'varchar', 'nchar', 'nvarchar', 'text', 'ntext') THEN
+    IF string_arg_datatype NOT IN ('char', 'varchar', 'nchar', 'nvarchar') THEN
         RAISE EXCEPTION 'Argument data type % is invalid for argument 1 of Trim function.', string_arg_datatype;
     END IF;
 
