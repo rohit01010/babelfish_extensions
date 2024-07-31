@@ -105,12 +105,8 @@ GO
 ~~ROW COUNT: 1~~
 
 
-CREATE VIEW babel_4836_replace_dep_view AS
+CREATE VIEW babel_4836_replace_dep_view2 AS
     SELECT replace(a, b, c) as result FROM babel_4836_replace_t2
-GO
-
-CREATE VIEW babel_4836_replace_dep_view1 AS
-    SELECT replace(a, b, c) as result FROM babel_4836_replace_t3
 GO
 
 CREATE PROCEDURE babel_4836_replace_dep_proc AS
@@ -130,3 +126,28 @@ RETURNS TABLE
 AS
 RETURN (SELECT replace(a, b, c) as result FROM babel_4836_replace_t2)
 GO
+
+CREATE VIEW babel_4836_replace_dep_view1 AS
+    SELECT replace(a, b, c) as result FROM babel_4836_replace_t1
+GO
+
+CREATE VIEW babel_4836_replace_dep_view3 AS
+    SELECT replace(a, b, c) as result FROM babel_4836_replace_t3
+GO
+
+CREATE VIEW babel_4836_replace_dep_view4 AS
+    SELECT replace(a, b, c) as result FROM babel_4836_replace_t4
+GO
+
+CREATE VIEW babel_4836_replace_dep_view5 AS
+    SELECT replace(a, b, c) as result FROM babel_4836_replace_t5
+GO
+
+CREATE VIEW babel_4836_replace_dep_view6 AS
+    SELECT replace(a, b, c) as result FROM babel_4836_replace_text
+GO
+
+CREATE VIEW babel_4836_replace_dep_view7 AS
+    SELECT replace(a, b, c) as result FROM babel_4836_replace_ntext
+GO
+

@@ -527,7 +527,7 @@ nvarchar
 
 
 -- dependent objects
-SELECT * FROM babel_4836_replace_dep_view
+SELECT * FROM babel_4836_replace_dep_view2
 GO
 ~~START~~
 nvarchar
@@ -538,8 +538,49 @@ nvarchar
 SELECT * FROM babel_4836_replace_dep_view1
 GO
 ~~START~~
+nvarchar
+  abc🙂defghi🙂🙂                                    
+  比尔·拉莫斯                                          
+~~END~~
+
+
+SELECT * FROM babel_4836_replace_dep_view3
+GO
+~~START~~
 varchar
   abcx?yfghi??    
+~~END~~
+
+
+SELECT * FROM babel_4836_replace_dep_view4
+GO
+~~START~~
+varchar
+atuvde
+~~END~~
+
+
+SELECT * FROM babel_4836_replace_dep_view5
+GO
+~~START~~
+varchar
+atuvde
+~~END~~
+
+
+SELECT * FROM babel_4836_replace_dep_view6
+GO
+~~START~~
+varchar
+  abcjhi?ghi??    
+~~END~~
+
+
+SELECT * FROM babel_4836_replace_dep_view7
+GO
+~~START~~
+varchar
+  abcjhi?ghi??    
 ~~END~~
 
 

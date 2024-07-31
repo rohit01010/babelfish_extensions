@@ -7,7 +7,22 @@ GO
 DROP PROCEDURE babel_4836_replace_dep_proc
 GO
 
-DROP VIEW babel_4836_replace_dep_view
+DROP VIEW babel_4836_replace_dep_view7
+GO
+
+DROP VIEW babel_4836_replace_dep_view6
+GO
+
+DROP VIEW babel_4836_replace_dep_view5
+GO
+
+DROP VIEW babel_4836_replace_dep_view4
+GO
+
+DROP VIEW babel_4836_replace_dep_view3
+GO
+
+DROP VIEW babel_4836_replace_dep_view2
 GO
 
 DROP VIEW babel_4836_replace_dep_view1

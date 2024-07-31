@@ -233,10 +233,25 @@ SELECT replace(a, @pattern, @replacement) FROM babel_4836_replace_ntext
 GO
 
 -- dependent objects
-SELECT * FROM babel_4836_replace_dep_view
+SELECT * FROM babel_4836_replace_dep_view2
 GO
 
 SELECT * FROM babel_4836_replace_dep_view1
+GO
+
+SELECT * FROM babel_4836_replace_dep_view3
+GO
+
+SELECT * FROM babel_4836_replace_dep_view4
+GO
+
+SELECT * FROM babel_4836_replace_dep_view5
+GO
+
+SELECT * FROM babel_4836_replace_dep_view6
+GO
+
+SELECT * FROM babel_4836_replace_dep_view7
 GO
 
 EXEC babel_4836_replace_dep_proc
