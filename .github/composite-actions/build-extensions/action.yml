@@ -30,13 +30,15 @@ runs:
         export CMAKE_C_COMPILER_LAUNCHER=ccache
         export CMAKE_CXX_COMPILER_LAUNCHER=ccache 
         cd contrib/babelfishpg_money
-        make -j 4 && make install
+        make -j 4 > /dev/null
+        make install > /dev/null
         cd ../babelfishpg_common
-        PG_CPPFLAGS='-DENABLE_SPATIAL_TYPES' make -j 4
-        PG_CPPFLAGS='-DENABLE_SPATIAL_TYPES' make install
+        PG_CPPFLAGS='-DENABLE_SPATIAL_TYPES' make -j 4 > /dev/null
+        PG_CPPFLAGS='-DENABLE_SPATIAL_TYPES' make install > /dev/null
         cd ../babelfishpg_tds
-        make -j 4 && make install
+        make -j 4 > /dev/null
+        make install > /dev/null
         cd ../babelfishpg_tsql
-        PG_CPPFLAGS='-I/usr/include -DENABLE_TDS_LIB -DENABLE_SPATIAL_TYPES' SHLIB_LINK='-lsybdb -L/usr/lib64' make
-        PG_CPPFLAGS='-I/usr/include -DENABLE_TDS_LIB -DENABLE_SPATIAL_TYPES' SHLIB_LINK='-lsybdb -L/usr/lib64' make install
+        PG_CPPFLAGS='-I/usr/include -DENABLE_TDS_LIB -DENABLE_SPATIAL_TYPES' SHLIB_LINK='-lsybdb -L/usr/lib64' make > /dev/null
+        PG_CPPFLAGS='-I/usr/include -DENABLE_TDS_LIB -DENABLE_SPATIAL_TYPES' SHLIB_LINK='-lsybdb -L/usr/lib64' make install > /dev/null
       shell: bash
