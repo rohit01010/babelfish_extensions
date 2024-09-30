@@ -32,7 +32,7 @@ USE master;
 GO
 SELECT * FROM t1; -- doesn't exist expected, querying master.dbo.t1
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "t1" does not exist)~~
 

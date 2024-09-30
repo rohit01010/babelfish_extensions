@@ -13,7 +13,7 @@ literal
 -- should report that column "ident" does not exist
 SELECT [ident]
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "ident" does not exist)~~
 
@@ -53,7 +53,7 @@ literal
 -- should report that column "ident" does not exist
 SELECT [ident]
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "ident" does not exist)~~
 
@@ -61,7 +61,7 @@ GO
 -- should report that column "ident" does not exist
 SELECT "ident"
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "ident" does not exist)~~
 
@@ -69,7 +69,7 @@ GO
 -- should report that column "f'oo" does not exist
 SELECT "f'oo"
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "f'oo" does not exist)~~
 

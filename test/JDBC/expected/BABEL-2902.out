@@ -397,7 +397,7 @@ USE babel_2902_testdb_1
 SELECT * FROM babel_2902_ma1 --table only exists in master db
 PRINT 10 -- shouldn't execute
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "babel_2902_ma1" does not exist)~~
 
@@ -1019,7 +1019,7 @@ USE babel_2902_testdb_1
 SELECT * FROM babel_2902_ma1 --table only exists in master db
 PRINT 10 -- shouldn't execute
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "babel_2902_ma1" does not exist)~~
 

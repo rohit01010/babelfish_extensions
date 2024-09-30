@@ -349,7 +349,7 @@ GO
 
 SELECT * FROM BABEL_3646_before_14_6_vu_prepare_v12
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "babel_3646_before_14_6_vu_prepare_v12" does not exist)~~
 
@@ -472,7 +472,7 @@ GO
 
 SELECT * FROM BABEL_3646_before_14_6_vu_prepare_v16
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "babel_3646_before_14_6_vu_prepare_v16" does not exist)~~
 

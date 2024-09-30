@@ -138,19 +138,19 @@ GO
 -- should fail to find these tables
 select * from #tt_1st; 
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "#tt_1st" does not exist)~~
 
 select * from #tt_2nd;
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "#tt_2nd" does not exist)~~
 
 select * from #tt_3rd;
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "#tt_3rd" does not exist)~~
 
@@ -231,7 +231,7 @@ GO
 
 select * from #tt; -- can't find the table
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "#tt" does not exist)~~
 
@@ -246,7 +246,7 @@ GO
 
 EXEC temp_table_sp_index;
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "tt" does not exist)~~
 

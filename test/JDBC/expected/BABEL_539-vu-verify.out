@@ -300,7 +300,7 @@ GO
 
 SELECT col1, name, id_num FROM #babel_539NewTable1 ORDER BY col1; 
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "name" does not exist)~~
 

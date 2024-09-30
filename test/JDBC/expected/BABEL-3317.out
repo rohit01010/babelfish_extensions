@@ -54,7 +54,7 @@ GO
 SET PARSEONLY OFF;
 SELECT * FROM t3317;
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "t3317" does not exist)~~
 

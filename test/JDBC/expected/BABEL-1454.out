@@ -199,7 +199,7 @@ GO
 
 GRANT ALL ON dummy_schema TO PUBLIC;
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "dummy_schema" does not exist)~~
 

@@ -644,7 +644,7 @@ DECLARE @handle int;
 EXEC SP_PREPARE @handle OUT, NULL, 'SELECT * FROM t1'
 SELECT (case when @handle IS NOT NULL then 'true' else 'false' end) as 'Prepared'
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "t1" does not exist)~~
 
@@ -654,7 +654,7 @@ DECLARE @handle int;
 EXEC SP_PREPARE @handle OUT, NULL, 'DECLARE @var int; SELECT * FROM t1 WHERE c = @var'
 SELECT (case when @handle IS NOT NULL then 'true' else 'false' end) as 'Prepared'
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "t1" does not exist)~~
 
@@ -690,7 +690,7 @@ text
 true
 ~~END~~
 
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "t1" does not exist)~~
 
@@ -722,7 +722,7 @@ text
 true
 ~~END~~
 
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "t1" does not exist)~~
 
@@ -738,7 +738,7 @@ text
 true
 ~~END~~
 
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "t1" does not exist)~~
 

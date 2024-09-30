@@ -209,7 +209,7 @@ Hello, world!
 
 select "Hello, world!";
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "hello, world!" does not exist)~~
 

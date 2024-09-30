@@ -58,25 +58,25 @@ int
 -- unquoted field failed queries
 select field1 from (select field1 from select_strip_parens_v1) a;
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "field1" does not exist)~~
 
 select field1 from (select (field1) from select_strip_parens_v1) a;
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "field1" does not exist)~~
 
 select field1 from (select ((field1)) from select_strip_parens_v1) a;
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "field1" does not exist)~~
 
 select field1 from (select (  ( field1 )  ) from select_strip_parens_v1) a;
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "field1" does not exist)~~
 
@@ -84,7 +84,7 @@ select field1 from (select (
   ( field1 )
 ) from select_strip_parens_v1) a;
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "field1" does not exist)~~
 
@@ -92,7 +92,7 @@ select field1 from (select (
   ( "field1" )
 ) from select_strip_parens_v1) a;
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "field1" does not exist)~~
 
@@ -100,31 +100,31 @@ select field1 from (select (
   ( [field1] )
 ) from select_strip_parens_v1) a;
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "field1" does not exist)~~
 
 select field1 from (select " field1" from select_strip_parens_t1) a;
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column " field1" does not exist)~~
 
 select field1 from (select " field1" from select_strip_parens_v1) a;
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column " field1" does not exist)~~
 
 select field1 from (select [ field1] from select_strip_parens_t1) a;
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column " field1" does not exist)~~
 
 select field1 from (select [ field1] from select_strip_parens_v1) a;
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column " field1" does not exist)~~
 
@@ -132,7 +132,7 @@ select field1 from (select (
   ( " field1" )
 ) from select_strip_parens_t1) a;
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column " field1" does not exist)~~
 
@@ -140,7 +140,7 @@ select field1 from (select (
   ( " field1" )
 ) from select_strip_parens_v1) a;
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column " field1" does not exist)~~
 
@@ -148,7 +148,7 @@ select field1 from (select (
   ( [ field1] )
 ) from select_strip_parens_t1) a;
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column " field1" does not exist)~~
 
@@ -156,7 +156,7 @@ select field1 from (select (
   ( [ field1] )
 ) from select_strip_parens_v1) a;
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column " field1" does not exist)~~
 
@@ -212,31 +212,31 @@ int#!#int
 -- quoted fields failed queries
 select " field2  ", [  field3 ] from (select " field2  ", [  field3 ] from select_strip_parens_v1) a;
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column " field2  " does not exist)~~
 
 select " field2  ", "  field3 " from (select " field2  ", [  field3 ] from select_strip_parens_v1) a;
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column " field2  " does not exist)~~
 
 select " field2  ", [  field3 ] from (select (" field2  "), ([  field3 ]) from select_strip_parens_v1) a;
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column " field2  " does not exist)~~
 
 select " field2  ", [  field3 ] from (select ((" field2  ")), (([  field3 ])) from select_strip_parens_v1) a;
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column " field2  " does not exist)~~
 
 select " field2  ", [  field3 ] from (select ( ( " field2  " ) ), ( ( [  field3 ] ) ) from select_strip_parens_v1) a;
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column " field2  " does not exist)~~
 
@@ -246,19 +246,19 @@ select " field2  ", [  field3 ] from (select (
   ( [  field3 ] )
 ) from select_strip_parens_v1) a;
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column " field2  " does not exist)~~
 
 select "  field2 " from (select " field2  ", [  field3 ] from select_strip_parens_t1) a;
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "  field2 " does not exist)~~
 
 select [ field3  ] from (select " field2  ", [  field3 ] from select_strip_parens_v1) a;
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column " field2  " does not exist)~~
 

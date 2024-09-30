@@ -3058,7 +3058,7 @@ CREATE INDEX TestPartitionIndex
 ON TestPartitionedTable(NonExistentColumn1)
 ON NonExistentPartitionScheme (NonExistentColumn2);
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "nonexistentcolumn1" does not exist)~~
 

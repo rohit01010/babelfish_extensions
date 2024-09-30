@@ -34,7 +34,7 @@ GO
 -- test when leading space - should throw error
 DBCC CHECKIDENT('   babel_3201_t_int  ', NORESEED);
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "   babel_3201_t_int" does not exist)~~
 
@@ -352,7 +352,7 @@ GO
 -- Table undefined
 DBCC CHECKIDENT(fake_babel_3201_t1, RESEED);
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "fake_babel_3201_t1" does not exist)~~
 

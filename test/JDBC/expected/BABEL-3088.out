@@ -23,7 +23,7 @@ exec p3088 1;
 go
 ~~ROW COUNT: 1~~
 
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "non_existing_table" does not exist)~~
 
@@ -57,7 +57,7 @@ exec p3088 1;
 go
 ~~ROW COUNT: 1~~
 
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "non_existing_table" does not exist)~~
 

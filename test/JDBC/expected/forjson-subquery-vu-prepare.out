@@ -34,7 +34,7 @@ SELECT (
 	FOR JSON AUTO
 ) c1
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "id" does not exist)~~
 

@@ -76,7 +76,7 @@ BABEL-3249
 BABEL-3268
 BABEL-328
 BABEL-3314
-BABEL-3347
+BABEL-3347-before-15_9-or-16_5
 BABEL-3358
 BABEL-3360
 BABEL-3369
@@ -90,7 +90,7 @@ BABEL-3556
 BABEL-3588
 BABEL-3614
 BABEL-3640
-BABEL-3646
+BABEL-3646-before-15_9-or-16_5
 BABEL-3655
 BABEL-3657
 BABEL-3702
@@ -196,7 +196,7 @@ datepart
 datetime2fromparts
 forjson
 forjson-datatypes
-forjson-subquery
+forjson-subquery-before-15_9-or-16_5
 format
 format-dep
 forxml

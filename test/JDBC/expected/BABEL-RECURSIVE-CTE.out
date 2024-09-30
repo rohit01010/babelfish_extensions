@@ -69,7 +69,7 @@ AS (
 )
 SELECT c1 FROM numbers ORDER BY c1
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "numbers" does not exist)~~
 

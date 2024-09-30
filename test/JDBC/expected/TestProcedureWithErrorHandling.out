@@ -45,7 +45,7 @@ int
 
 SELECT * FROM procTab1
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "proctab1" does not exist)~~
 
@@ -141,7 +141,7 @@ int
 
 SELECT * FROM procTab1
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "proctab1" does not exist)~~
 
@@ -215,7 +215,7 @@ int
 
 SELECT * FROM procTab1
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "proctab1" does not exist)~~
 

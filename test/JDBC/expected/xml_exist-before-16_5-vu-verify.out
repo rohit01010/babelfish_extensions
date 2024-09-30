@@ -833,7 +833,7 @@ GO
 -- Dependent objects
 SELECT * FROM babel_5222_xml_exist_dep_view
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "babel_5222_xml_exist_dep_view" does not exist)~~
 
@@ -863,35 +863,35 @@ GO
 
 INSERT INTO babel_5222_xml_exist_compcol VALUES (1, '<artist name="Rohit Bhagat" />')
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "babel_5222_xml_exist_compcol" does not exist)~~
 
 
 INSERT INTO babel_5222_xml_exist_compcol VALUES (2, '<artist />')
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "babel_5222_xml_exist_compcol" does not exist)~~
 
 
 SELECT col_xml, comp_col FROM babel_5222_xml_exist_compcol ORDER BY id
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "babel_5222_xml_exist_compcol" does not exist)~~
 
 
 INSERT INTO babel_5222_xml_exist_constraint VALUES ('<artist name="Rohit Bhagat" />')
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "babel_5222_xml_exist_constraint" does not exist)~~
 
 
 INSERT INTO babel_5222_xml_exist_constraint VALUES ('<artist />')
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "babel_5222_xml_exist_constraint" does not exist)~~
 

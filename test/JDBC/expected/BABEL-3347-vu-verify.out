@@ -12,7 +12,7 @@ ore
 -- null constant
 SELECT * FROM babel_3347_vu2
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "babel_3347_vu2" does not exist)~~
 
@@ -88,7 +88,7 @@ GO
 
 SELECT * FROM babel_3347_vu_tbl
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "babel_3347_vu_tbl" does not exist)~~
 

@@ -2951,7 +2951,7 @@ go
 
 select t.name from test_special_char_t t where contains(b, 'one');
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "b" does not exist)~~
 
@@ -3014,7 +3014,7 @@ one: two
 
 select name as txt from test_special_char_t where contains(txt, 'hello');
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "txt" does not exist)~~
 

@@ -32,7 +32,7 @@ World
 /* multibyte characters with unsupported token */
 select "你好世界" from unicode_test with(nolock);
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "你好世界" does not exist)~~
 

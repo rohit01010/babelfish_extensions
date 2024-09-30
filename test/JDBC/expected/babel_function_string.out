@@ -653,7 +653,7 @@ amet.
 
 SELECT mycol FROM STRING_SPLIT('Lorem ipsum dolor sit amet.', ' ')
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "mycol" does not exist)~~
 

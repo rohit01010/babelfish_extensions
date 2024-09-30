@@ -200,6 +200,8 @@ XX000#!#The table-valued parameter "%s" must be declared with the READONLY optio
 23514#!#value for domain %s violates check constraint "%s"#!##!#220
 42P01#!#view "%s" does not exist#!##!#3701
 42P01#!#table "%s" does not exist#!##!#3701
+42P01#!#relation "%s" does not exist#!##!#208
+42703#!#column "%s" does not exist#!##!#207
 42P13#!#PL/tsql functions cannot return type %s#!##!#2733
 0A000#!#Column name or number of supplied values does not match table definition.#!##!#213
 42501#!#Only members of the sysadmin role can execute this stored procedure.#!##!#15003

@@ -60,7 +60,7 @@ set quoted_identifier on
 go
 select "aBc"
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "abc" does not exist)~~
 
@@ -460,7 +460,7 @@ set quoted_identifier on
 go
 select dbo.dubquote_f1("ab'cd")
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "ab'cd" does not exist)~~
 
@@ -480,7 +480,7 @@ ab"cd
 
 select dbo.dubquote_f1("ab""cd")
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "ab"cd" does not exist)~~
 
@@ -714,7 +714,7 @@ go
 -- RAISERROR arguments are not yet rewritten. this should raise an error
 RAISERROR ('%s %s',  10, 1, 'aBc', "def");
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "def" does not exist)~~
 
@@ -770,7 +770,7 @@ set quoted_identifier on
 go
 print "aBc"
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "abc" does not exist)~~
 
@@ -1570,13 +1570,13 @@ go
 -- negative tests
 declare @v varchar(20) = "aBc" select @v
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "abc" does not exist)~~
 
 declare @v varchar(20) = "'aBc'" select @v
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "'abc'" does not exist)~~
 

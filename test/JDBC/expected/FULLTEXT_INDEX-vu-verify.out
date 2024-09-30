@@ -88,7 +88,7 @@ GO
 -- Creating index in a non existent table of a schema, should throw error
 CREATE FULLTEXT INDEX ON fti_schema_s1.fti_table_t9(a) KEY INDEX IX_s1_t9_a;
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "fti_table_t9" does not exist)~~
 

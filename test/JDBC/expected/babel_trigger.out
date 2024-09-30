@@ -414,7 +414,7 @@ GO
 
 create trigger babel_trigger_trig3 on babel_trigger_t1 after insert as select 1;
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "babel_trigger_t1" does not exist)~~
 

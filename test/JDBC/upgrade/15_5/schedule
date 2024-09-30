@@ -79,7 +79,7 @@ BABEL-3268
 BABEL-328
 BABEL-3314
 BABEL-3326
-BABEL-3347
+BABEL-3347-before-15_9-or-16_5
 BABEL-3358
 BABEL-3360
 BABEL-3369
@@ -94,7 +94,7 @@ BABEL-3556
 BABEL-3588
 BABEL-3614
 BABEL-3640
-BABEL-3646
+BABEL-3646-before-15_9-or-16_5
 BABEL-3655
 BABEL-3657
 BABEL-3696
@@ -151,7 +151,7 @@ babelfish_integrity_checker
 babelfish_migration_mode
 babelfish_namespace_ext
 babelfish_sysdatabases
-babel_function_string
+babel_function_string-before-15_9-or-16_5
 BABEL_GRANT_CONNECT
 babel_isnumeric
 BABEL_COL_NAME
@@ -211,7 +211,7 @@ datepart
 datetime2fromparts-after-15-2
 forjson
 forjson-datatypes
-forjson-subquery
+forjson-subquery-before-15_9-or-16_5
 forjson-nesting
 format
 format-dep
@@ -253,7 +253,7 @@ rowcount
 schema_resolution_func
 schema_resolution_proc
 schema_resolution_trigger
-select-strip-parens
+select-strip-parens-before-15_9-or-16_5
 sp_describe_first_result_set
 sp_tablecollations
 smalldatetimefromparts-dep
@@ -461,7 +461,7 @@ todatetimeoffset-dep
 triggers_with_transaction
 typeid-typename
 typeid-typename-dep
-unquoted_string
+unquoted_string-before-15_9-or-16_5
 doublequoted_string
 alter_authorization_change_db_owner
 sp_changedbowner

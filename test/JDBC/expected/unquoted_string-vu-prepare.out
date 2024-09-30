@@ -114,7 +114,7 @@ go
 create procedure unqStr_proc_5 @p1 varchar(20), @p2 varchar(20) = @p1
 as select @p2
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "@p1" does not exist)~~
 
@@ -147,7 +147,7 @@ begin
 return @p2
 end
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "@p1" does not exist)~~
 

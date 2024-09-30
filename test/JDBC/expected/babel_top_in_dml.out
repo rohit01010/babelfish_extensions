@@ -570,7 +570,7 @@ OUTPUT deleted.*
 FROM non_existant_tbl t1
 ROLLBACK
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "non_existant_tbl" does not exist)~~
 

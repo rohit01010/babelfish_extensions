@@ -78,7 +78,7 @@ int#!#char
 
 SELECT * FROM @tv
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "@tv" does not exist)~~
 
@@ -364,7 +364,7 @@ SELECT dbo.LevenschteinDifference(NULL, NULL)
 GO
 ~~START~~
 int
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "numbers" does not exist)~~
 
@@ -373,7 +373,7 @@ SELECT dbo.LevenschteinDifference(' ', ' ')
 GO
 ~~START~~
 int
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "numbers" does not exist)~~
 
@@ -570,7 +570,7 @@ EXECUTE usp_PopulateDiscount
 go
 ~~ROW COUNT: 1~~
 
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "discount" does not exist)~~
 

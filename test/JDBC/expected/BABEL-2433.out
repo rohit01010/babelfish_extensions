@@ -27,7 +27,7 @@ int
 -- error is: column "b" does not exist
 select a as B from obytt order by b+3;
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "b" does not exist)~~
 

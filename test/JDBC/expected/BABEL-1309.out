@@ -16,7 +16,7 @@ go
 
 exec sp_updatestats @resample;
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "@resample" does not exist)~~
 

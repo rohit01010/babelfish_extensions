@@ -61,7 +61,7 @@ EXEC sys.sp_reset_connection
 GO
 SELECT * from #babel_temp_table
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "#babel_temp_table" does not exist)~~
 

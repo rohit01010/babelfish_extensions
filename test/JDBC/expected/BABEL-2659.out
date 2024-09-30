@@ -20,7 +20,7 @@ go
 -- error: non-existing column
 select ansi_defaults from t2659_2;
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "ansi_defaults" does not exist)~~
 
@@ -28,7 +28,7 @@ go
 -- error: non-existing table
 select ansi_defaults from t2659_3;
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "t2659_3" does not exist)~~
 

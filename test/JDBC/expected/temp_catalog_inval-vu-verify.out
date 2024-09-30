@@ -24,7 +24,7 @@ go
 
 select * from #t1
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "#t1" does not exist)~~
 
@@ -73,7 +73,7 @@ go
 
 select * from #t2
 go
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "#t2" does not exist)~~
 

@@ -264,7 +264,7 @@ GO
 
 SELECT * FROM @tvf                           -- Table Variable not valid anymore
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "@tvf" does not exist)~~
 
@@ -322,7 +322,7 @@ GO
 
 SELECT * FROM @tvf                           -- Table Variable not valid anymore
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "@tvf" does not exist)~~
 

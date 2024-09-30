@@ -1,0 +1,26 @@
+DROP PROCEDURE babel_5186_try_catch_relation_err1
+GO
+
+DROP PROCEDURE babel_5186_try_catch_relation_err2
+GO
+
+DROP PROCEDURE babel_5186_try_catch_relation_err3
+GO
+
+DROP PROCEDURE babel_5186_try_catch_relation_err4
+GO
+
+DROP TABLE babel_5186_try_catch_table1
+GO
+
+DROP PROCEDURE babel_5186_try_catch_column_err1
+GO
+
+DROP PROCEDURE babel_5186_try_catch_column_err2
+GO
+
+DROP PROCEDURE babel_5186_try_catch_column_err3
+GO
+
+DROP PROCEDURE babel_5186_try_catch_column_err4
+GO

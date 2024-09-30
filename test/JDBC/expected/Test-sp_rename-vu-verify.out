@@ -646,7 +646,7 @@ sp_rename_vu_s1_t2_col2#!#sp_rename_vu_schema1#!#sp_rename_vu_table2_new
 -- COLUMN: error-case
 EXEC sp_rename 'sp_rename_vu_schema1.sp_rename_vu_table2_new.sp_rename_vu_s1_t2_wrong_col', 'sp_rename_vu_s1_t2_col1_new', 'COLUMN';
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 207)~~
 
 ~~ERROR (Message: column "sp_rename_vu_s1_t2_wrong_col" does not exist)~~
 

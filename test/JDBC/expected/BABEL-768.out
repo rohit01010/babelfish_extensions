@@ -74,7 +74,7 @@ GO
 
 INSERT INTO t8 VALUES(1)
 GO
-~~ERROR (Code: 33557097)~~
+~~ERROR (Code: 208)~~
 
 ~~ERROR (Message: relation "t8" does not exist)~~
 
