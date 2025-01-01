@@ -964,12 +964,7 @@ BEGIN
                     ELSE CONVERSION_LANG
                   END;
 
-    BEGIN
-        v_lang_metadata_json := sys.babelfish_get_lang_metadata_json(v_language);
-    EXCEPTION
-        WHEN OTHERS THEN
-        RAISE invalid_escape_sequence;
-    END;
+    v_lang_metadata_json := sys.babelfish_get_lang_metadata_json(v_language);
 
     v_date_format := coalesce(nullif(DATE_FORMAT, ''), v_lang_metadata_json ->> 'date_format');
 
