@@ -2621,17 +2621,6 @@ BEGIN
     END IF;
 
     RETURN v_lang_data_jsonb;
-EXCEPTION
-    WHEN invalid_text_representation THEN
-        RAISE USING MESSAGE := pg_catalog.format('The language metadata JSON value extracted from chache is not a valid JSON object.',
-                                      p_lang_spec_culture),
-                    HINT := 'Drop the current session, fix the appropriate record in "sys.babelfish_syslanguages" table, and try again after reconnection.';
-
-    WHEN OTHERS THEN
-        RAISE USING MESSAGE := pg_catalog.format('"%s" is not a valid special culture or language name parameter.',
-                                      p_lang_spec_culture),
-                    DETAIL := 'Use of incorrect "lang_spec_culture" parameter value during conversion process.',
-                    HINT := 'Change "lang_spec_culture" parameter to the proper value and try again.';
 END;
 $BODY$
 LANGUAGE plpgsql
