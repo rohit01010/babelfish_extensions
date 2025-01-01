@@ -2624,7 +2624,7 @@ BEGIN
 END;
 $BODY$
 LANGUAGE plpgsql
-STABLE;
+STABLE PARALLEL UNSAFE;
 
 /*
  * Following function sys.babelfish_get_microsecs_from_fractsecs_v2 rounds off p_fractsecs to the given scale
