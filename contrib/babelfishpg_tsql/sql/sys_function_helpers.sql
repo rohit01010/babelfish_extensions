@@ -2530,6 +2530,7 @@ DECLARE
     v_lang_data_jsonb JSONB;
     v_lang_spec_culture VARCHAR COLLATE "C";
     v_is_cached BOOLEAN := FALSE;
+    v_err_message VARCHAR;
 BEGIN
     v_lang_spec_culture := pg_catalog.upper(pg_catalog.btrim(p_lang_spec_culture));
 
@@ -2614,17 +2615,23 @@ BEGIN
     END IF;
 
     IF (NOT v_is_cached) THEN
-        PERFORM set_config(format('sys.lang_metadata_json.%s',
-                                  v_lang_spec_culture),
-                           v_lang_data_jsonb::TEXT,
-                           FALSE);
+        BEGIN
+            PERFORM set_config(format('sys.lang_metadata_json.%s',
+                                    v_lang_spec_culture),
+                            v_lang_data_jsonb::TEXT,
+                            FALSE);
+        EXCEPTION
+            WHEN invalid_transaction_state THEN
+                GET STACKED DIAGNOSTICS v_err_message = MESSAGE_TEXT;
+                RAISE NOTICE '%', v_err_message;
+        END;
     END IF;
 
     RETURN v_lang_data_jsonb;
 END;
 $BODY$
 LANGUAGE plpgsql
-STABLE PARALLEL RESTRICTED;
+STABLE;
 
 /*
  * Following function sys.babelfish_get_microsecs_from_fractsecs_v2 rounds off p_fractsecs to the given scale
