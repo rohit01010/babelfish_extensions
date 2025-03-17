@@ -8,9 +8,9 @@ go
 ~~START~~
 nvarchar#!#nvarchar#!#nvarchar#!#nvarchar#!#tinyint#!#smallint#!#int
 master#!#dbo#!#babel_5655_t1#!#a#!#10#!#10#!#0
-master#!#dbo#!#babel_5655_t1#!#b#!#<NULL>#!#10#!#<NULL>
-master#!#dbo#!#babel_5655_t1#!#c#!#<NULL>#!#10#!#<NULL>
-master#!#dbo#!#babel_5655_t1#!#d#!#<NULL>#!#10#!#<NULL>
+master#!#dbo#!#babel_5655_t1#!#b#!#5#!#10#!#1
+master#!#dbo#!#babel_5655_t1#!#c#!#6#!#10#!#2
+master#!#dbo#!#babel_5655_t1#!#d#!#7#!#10#!#3
 ~~END~~
 
 
@@ -51,6 +51,50 @@ numeric
 ~~END~~
 
 
-drop table babel_5655_t1
+declare @strDev float = 2.73;
+select 0.00 as a, ROUND(@strDev, 2) as b into babel_5655_temp_t1
+go
+
+declare @strDev float = 2.73;
+select
+    case
+        when 2 = 3 then 0.00
+        else ROUND(@strDev, 2)
+    end as a
+into babel_5655_temp_t2
+go
+
+select TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME, NUMERIC_PRECISION, NUMERIC_PRECISION_RADIX, NUMERIC_SCALE
+from information_schema.columns 
+where TABLE_NAME = 'babel_5655_temp_t1' order by COLUMN_NAME
+go
+~~START~~
+nvarchar#!#nvarchar#!#nvarchar#!#nvarchar#!#tinyint#!#smallint#!#int
+master#!#dbo#!#babel_5655_temp_t1#!#a#!#6#!#10#!#2
+master#!#dbo#!#babel_5655_temp_t1#!#b#!#<NULL>#!#10#!#<NULL>
+~~END~~
+
+
+select TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME, NUMERIC_PRECISION, NUMERIC_PRECISION_RADIX, NUMERIC_SCALE
+from information_schema.columns 
+where TABLE_NAME = 'babel_5655_temp_t2' order by COLUMN_NAME
+go
+~~START~~
+nvarchar#!#nvarchar#!#nvarchar#!#nvarchar#!#tinyint#!#smallint#!#int
+master#!#dbo#!#babel_5655_temp_t2#!#a#!#6#!#10#!#2
+~~END~~
+
+
+select 2.73 * 1.0, 0 * 1.0, 0.00 * 1.0, 123.12 * 1.0, 423.13 * 1.0, 1.00 * 1.0, 1.05 * 1.0, 8.05 * 1.0, 11111.05 * 1.0, 10000.1234 * 1.0, 100000000.1234 * 1.0, 1000000000000.1234 * 1.0;
+go
+~~START~~
+numeric#!#numeric#!#numeric#!#numeric#!#numeric#!#numeric#!#numeric#!#numeric#!#numeric#!#numeric#!#numeric#!#numeric
+2.730#!#0.0#!#0.000#!#123.120#!#423.130#!#1.000#!#1.050#!#8.050#!#11111.050#!#10000.12340#!#100000000.12340#!#1000000000000.12340
+~~END~~
+
+
+drop table babel_5655_t1;
+drop table babel_5655_temp_t1;
+drop table babel_5655_temp_t2;
 go
 

@@ -46,9 +46,11 @@ from information_schema.columns
 where TABLE_NAME = 'babel_5655_temp_t2' order by COLUMN_NAME
 go
 
-select 2.73 * 1.0, 0 * 1.0, 0.00 * 1.0, 123.12 * 1.0, 423.13 * 1.0, 1.00 * 1.0, 1.05 * 1.0, 8.05 * 1.0, 11111.05 * 1.0, 10000.1234 * 1.0, 100000000.1234 * 1.0, 1000000000000.1234 * 1.0
-go		
+select 2.73 * 1.0, 0 * 1.0, 0.00 * 1.0, 123.12 * 1.0, 423.13 * 1.0, 1.00 * 1.0, 1.05 * 1.0, 8.05 * 1.0, 11111.05 * 1.0, 10000.1234 * 1.0, 100000000.1234 * 1.0, 1000000000000.1234 * 1.0;
+go
 
-drop table babel_5655_t1
+drop table babel_5655_t1;
+drop table babel_5655_temp_t1;
+drop table babel_5655_temp_t2;
 go
 

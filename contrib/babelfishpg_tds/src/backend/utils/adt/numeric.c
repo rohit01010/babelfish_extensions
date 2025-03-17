@@ -765,14 +765,25 @@ numeric_get_typmod(Numeric num)
 				scale, weight, sign, ndigits, NUMERIC_DIGITS(num)[0]);
 
 	/*
-	 * We can identify a zero by the fact that there are no digits at all. In
-	 * case of zero both precision and scale will be evaluated to zero, so we
-	 * will set (precision,scale) to T-SQL default (18,0).
+	 * We can identify a zero by the fact that there are no digits at all.
 	 */
-	if (NUMERIC_NDIGITS(num) == 0 && scale == 0)
+	if (NUMERIC_NDIGITS(num) == 0)
 	{
-		precision = 18;
-		scale = 0;
+		/*
+		 * In case of zero with 
+		 * 1. scale zero both precision and scale will be evaluated to zero, so we
+		 *  will set (precision,scale) to T-SQL default (18,0). 
+		 * 2. scale non-zero both precision and scale should be (scale+1, scale)
+		 */
+		if (scale == 0)
+		{
+			precision = 18;
+			scale = 0;
+		}
+		else
+		{
+			precision = 1 + scale;
+		}
 	}
 	else if (weight >= 0)
 	{
