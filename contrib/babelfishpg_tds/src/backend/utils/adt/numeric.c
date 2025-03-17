@@ -757,7 +757,12 @@ numeric_get_typmod(Numeric num)
 {
 	int32_t		scale = NUMERIC_DSCALE(num);
 	int32_t		weight = NUMERIC_WEIGHT(num);
+	int32_t		sign = NUMERIC_SIGN(num);
+	int32_t		ndigits = NUMERIC_NDIGITS(num);
 	int32_t		precision;
+
+	elog(LOG, "scale = %d, weight = %d, sign = %d, ndigits = %d, leading digit = %d",
+				scale, weight, sign, ndigits, NUMERIC_DIGITS(num)[0]);
 
 	/*
 	 * We can identify a zero by the fact that there are no digits at all. In
