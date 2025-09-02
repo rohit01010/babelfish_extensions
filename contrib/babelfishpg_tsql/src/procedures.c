@@ -4926,24 +4926,29 @@ sp_xml_removedocument(PG_FUNCTION_ARGS)
 	PG_RETURN_VOID();
 }
 
-/*
- * Function to retrieve XML document from temporary table using document ID
- */
 #define XML_HANDLE_DOC_COLUMN_NUM 6
-Datum
-tsql_openxml_get_xmldoc(PG_FUNCTION_ARGS)
+#define XML_HANDLE_NAMESPACE_COLUMN_NUM 7
+
+void
+get_xml_data_and_namespace_data(int idoc, xmltype **xml_data, xmltype **ns_data)
 {
-	int32                  document_id = PG_GETARG_INT32(0);
-	Relation               relation;
-	ScanKeyData            skey[1];
-	TableScanDesc          scan;
-	HeapTuple              tuple;
-	bool                   found = false;
-	Datum                  result = (Datum) 0;
-	bool                   isnull = true;
-	EphemeralNamedRelation enr = NULL;
-	bool                   table_exists = false;
-	
+	EphemeralNamedRelation		enr = NULL;
+	Relation               		relation;
+	ScanKeyData            		skey[1];
+	TableScanDesc      		    scan;
+	HeapTuple              		tuple;
+	Datum                  		datum;
+	bool                   		isnull;
+	bool              	        table_exists = false;
+
+	if (xml_data == NULL && ns_data == NULL)
+		return;
+
+	if (xml_data)
+		*xml_data = NULL;
+	if (ns_data)
+		*ns_data = NULL;
+
 	/* Check if the temporary table exists */
 	if (xml_handle_temp_table_name != NULL)
 	{
@@ -4959,36 +4964,62 @@ tsql_openxml_get_xmldoc(PG_FUNCTION_ARGS)
 	{
 		ereport(ERROR,
 				(errcode(ERRCODE_UNDEFINED_OBJECT),
-				 errmsg("Could not find prepared statement with handle %d", document_id)));
+				 errmsg("Could not find prepared statement with handle %d", idoc)));
 	}
 
 	ScanKeyInit(&skey[0],
 				1,  /* Column number */
 				BTEqualStrategyNumber, F_INT4EQ,
-				Int32GetDatum(document_id));
+				Int32GetDatum(idoc));
 	
 	scan = table_beginscan_catalog(relation, 1, skey);
 	tuple = heap_getnext(scan, ForwardScanDirection);
 	
 	if (HeapTupleIsValid(tuple))
 	{
-		/* Get the XML document from column 6 (doc) */
-		result = heap_getattr(tuple, XML_HANDLE_DOC_COLUMN_NUM, RelationGetDescr(relation), &isnull);
-		
-		if (!isnull)
+		/* Get the XML document */
+		if (xml_data)
 		{
-			/* Make a copy of the value */
-			result = datumCopy(result, false, -1);
-			found = true;
+			isnull = true;
+			datum = heap_getattr(tuple, XML_HANDLE_DOC_COLUMN_NUM, RelationGetDescr(relation), &isnull);
+			
+			if (!isnull)
+				*xml_data = DatumGetXmlP(datum);
+			else
+				*xml_data = NULL;
+		}
+		
+		/* Get the namespaces */
+		if (ns_data)
+		{
+			isnull = true;
+			datum = heap_getattr(tuple, XML_HANDLE_NAMESPACE_COLUMN_NUM, RelationGetDescr(relation), &isnull);
+			
+			if (!isnull)
+				*ns_data = DatumGetXmlP(datum);
+			else
+				*ns_data = NULL;
 		}
 	}
-	
+
 	table_endscan(scan);
 	relation_close(relation, AccessShareLock);
+}
+
+/*
+ * Function to retrieve XML document using document ID
+ */
+Datum
+tsql_openxml_get_xmldoc(PG_FUNCTION_ARGS)
+{
+	int32                  document_id = PG_GETARG_INT32(0);
+	xmltype				  *xmldata;
+
+	get_xml_data_and_namespace_data(document_id, &xmldata, NULL);
 	
 	/* If we found the document, return it */
-	if (found)
-		PG_RETURN_DATUM(result);
+	if (xmldata)
+		PG_RETURN_XML_P(xmldata);
 	
 	/* If we didn't find the handle , throw an error */
 	ereport(ERROR,

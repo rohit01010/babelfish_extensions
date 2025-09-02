@@ -49,6 +49,7 @@
 #include "utils/queryenvironment.h"
 #include "utils/float.h"
 #include "utils/xid8.h"
+#include "utils/xml.h"
 #include <math.h>
 
 #include "../src/babelfish_version.h"
@@ -72,6 +73,12 @@
 #include "catalog/pg_constraint.h"
 #include "parser/parse_oper.h"
 
+#ifdef USE_LIBXML
+#include <libxml/tree.h>
+#include <libxml/xpath.h>
+#include <libxml/xpathInternals.h>
+#endif							/* USE_LIBXML */
+
 #define TSQL_STAT_GET_ACTIVITY_COLS 26
 #define SP_DATATYPE_INFO_HELPER_COLS 23
 #define SYSVARCHAR_MAX_LENGTH 4000
@@ -80,6 +87,7 @@
 #define DATEPART_MIN_VALUE -53690               	/* minimun value for datepart general_integer_datatype */
 #define DATEPART_SMALLMONEY_MAX_VALUE 214748.3647	/* maximum value for datepart smallmoney */
 #define DATEPART_SMALLMONEY_MIN_VALUE -53690		/* minimum value for datepart smallmoney */
+#define TSQL_OPENXML_EDGE_TABLE_COLS 9
 
 typedef enum
 {
@@ -197,6 +205,7 @@ PG_FUNCTION_INFO_V1(datepart_internal_money);
 PG_FUNCTION_INFO_V1(datepart_internal_smallmoney);
 PG_FUNCTION_INFO_V1(replace_special_chars_fts);
 PG_FUNCTION_INFO_V1(isnumeric);
+PG_FUNCTION_INFO_V1(openxml_simple);
 
 void	   *string_to_tsql_varchar(const char *input_str);
 void	   *get_servername_internal(void);
@@ -234,6 +243,31 @@ extern bool inited_ht_tsql_cast_info;
 extern bool inited_ht_tsql_datatype_precedence_info;
 extern PLtsql_execstate *get_outermost_tsql_estate(int *nestlevel);
 extern char *replace_special_chars_fts_impl(char *input_str);
+
+MemoryContext TransMemoryContext = NULL;
+HTAB	     *ht_xmlNode2Id = NULL;
+static bool   inited_ht_xmlNode2Id = false;
+DynaVec 	 *xml_nodes_list = NULL;
+typedef struct ht_xmlNode2Id_entry
+{
+	xmlNode    *key;
+	size_t      id;
+} ht_xmlNode2Id_entry_t;
+
+struct PgXmlErrorContext
+{
+	int			magic;
+	/* strictness argument passed to pg_xml_init */
+	PgXmlStrictness strictness;
+	/* current error status and accumulated message, if any */
+	bool		err_occurred;
+	StringInfoData err_buf;
+	/* previous libxml error handling state (saved by pg_xml_init) */
+	xmlStructuredErrorFunc saved_errfunc;
+	void	   *saved_errcxt;
+	/* previous libxml entity handler (saved by pg_xml_init) */
+	xmlExternalEntityLoader saved_entityfunc;
+};
 
 char	   *bbf_servername = "BABELFISH";
 const char *bbf_servicename = "MSSQLSERVER";
@@ -5107,3 +5141,498 @@ get_bbf_pivot_tuplestore(const char 	*sourcetext,
 
 	return tupstore;
 }
+
+static void
+extract_namespaces_from_xml(xmltype *ns_data, char ***ns_names, char ***ns_uris, int *ns_count)
+{
+    xmlDocPtr	doc;
+    xmlNode    *root;
+    int         index;
+
+	*ns_names = NULL;
+	*ns_uris = NULL;
+	*ns_count = 0;
+
+	if (ns_data == NULL)
+		return;
+
+	doc = xml_parse_wrapper(ns_data, XMLOPTION_DOCUMENT, false, GetDatabaseEncoding(), NULL, NULL, NULL);
+
+    if (doc == NULL)
+        return;
+
+    root = xmlDocGetRootElement(doc);
+    for (xmlNs *cur = root->nsDef; cur != NULL; cur = cur->next)
+        (*ns_count)++;
+    
+    if (*ns_count == 0)
+    {
+        if (doc)
+            xmlFreeDoc(doc);
+        return;
+    }
+    *ns_names = (char **) palloc0((*ns_count) * sizeof(char *));
+    *ns_uris = (char **) palloc0((*ns_count) * sizeof(char *));
+
+    index = 0;
+    for (xmlNs *cur = root->nsDef; cur != NULL; cur = cur->next)
+    {
+        if (cur->prefix)
+        {
+            (*ns_names)[index] = (char *) pstrdup((const char *) cur->prefix);
+            (*ns_uris)[index] = cur->href ? (char *) pstrdup((const char *) cur->href) : NULL;
+        }
+    }
+    
+    if (doc)
+		xmlFreeDoc(doc);
+}
+
+static void
+add_entry_to_xml_handles_htab(xmlNode *key, size_t id)
+{
+	ht_xmlNode2Id_entry_t *entry;
+	entry = hash_search(ht_xmlNode2Id, &key, HASH_ENTER, NULL);
+	entry->id = id;
+}
+
+static size_t
+lookup_xmlNode_id(xmlNode *key)
+{
+	ht_xmlNode2Id_entry_t *hinfo;
+	bool		found;
+
+	if (key == NULL)
+	{
+		return 0;
+	}
+
+	hinfo = (ht_xmlNode2Id_entry_t *) hash_search(ht_xmlNode2Id,
+												  &key,
+												  HASH_FIND,
+												  &found);
+	if (!found)
+	{
+		return 0;
+	}
+	return hinfo->id;
+}
+
+static void
+init_xml_handles_htab(long nelem)
+{
+	HASHCTL		hashCtl;
+
+	if (TransMemoryContext == NULL) /* initialize memory context */
+	{
+		TransMemoryContext =
+			AllocSetContextCreateInternal(NULL,
+										  "OpenXML Context",
+										  ALLOCSET_DEFAULT_SIZES);
+	}
+
+	if (ht_xmlNode2Id == NULL)	/* create hash table */
+	{
+		MemSet(&hashCtl, 0, sizeof(hashCtl));
+		hashCtl.keysize = sizeof(xmlNodePtr);
+		hashCtl.entrysize = sizeof(ht_xmlNode2Id_entry_t);
+		hashCtl.hcxt = TransMemoryContext;
+		ht_xmlNode2Id = hash_create("Xml Node pointer to id Mapping",
+									  nelem,
+									  &hashCtl,
+									  HASH_ELEM | HASH_CONTEXT | HASH_BLOBS);
+	}
+
+	/* mark the hash table initialised */
+	inited_ht_xmlNode2Id = true;
+}
+
+static void 
+populate_xml_nodes(xmlNode *node)
+{
+	if (node->type == XML_TEXT_NODE && xmlIsBlankNode(node))
+		return;  // skip whitespace-only text node
+
+	if (node->type == XML_ELEMENT_NODE || node->type == XML_ATTRIBUTE_NODE || node->type == XML_TEXT_NODE || node->type == XML_CDATA_SECTION_NODE || node->type == XML_COMMENT_NODE || node->type == XML_PI_NODE)
+		vec_push_back(xml_nodes_list, &node);
+
+	if (node->type == XML_ELEMENT_NODE)
+	{
+		for (xmlNs *cur = node->nsDef; cur != NULL; cur = cur->next)
+		{
+			xmlNewNsProp(node, xmlNewNs(NULL, NULL, BAD_CAST "xmlns"), BAD_CAST cur->prefix, BAD_CAST cur->href);
+		}
+
+		for (xmlAttr *cur = node->properties; cur != NULL; cur = cur->next)
+		{
+			populate_xml_nodes((xmlNode *) cur);
+		}
+
+		for (xmlNodePtr cur = node->children; cur != NULL; cur = cur->next)
+		{
+			populate_xml_nodes(cur);
+		}
+	}
+	else if (node->type == XML_DOCUMENT_NODE || node->type == XML_ATTRIBUTE_NODE || node->type == XML_ENTITY_NODE || node->type == XML_ENTITY_REF_NODE || node->type == XML_ENTITY_DECL)
+	{
+		for (xmlNodePtr cur = node->children; cur != NULL; cur = cur->next)
+		{
+			populate_xml_nodes(cur);
+		}
+	}
+}
+
+static void
+assign_ids(xmlDoc *doc)
+{
+	size_t                 xml_nodes_list_size;
+	size_t                 i;
+	xmlNode               *root = xmlDocGetRootElement(doc);
+
+	xml_nodes_list = create_vector(sizeof(xmlNodePtr));
+	populate_xml_nodes((xmlNodePtr) doc);
+	xml_nodes_list_size = vec_size(xml_nodes_list);
+
+	init_xml_handles_htab((long) xml_nodes_list_size);
+
+	for (i = 1; i <= xml_nodes_list_size; i++)
+	{
+		xmlNode **cur = (xmlNode **) vec_at(xml_nodes_list, i-1);
+
+		if (root == *cur)
+			add_entry_to_xml_handles_htab(*cur, 0); // Assign id 0 to the root node
+		else
+			add_entry_to_xml_handles_htab(*cur, i);
+	}
+
+	destroy_vector(xml_nodes_list);
+	xml_nodes_list = NULL;
+}
+
+static void
+add_node_details(Tuplestorestate *tupstore, TupleDesc tupdesc, xmlNodePtr node, Bitmapset *xml_visited_nodes_set)
+{
+	Datum	   values[TSQL_OPENXML_EDGE_TABLE_COLS];
+	bool	   nulls[TSQL_OPENXML_EDGE_TABLE_COLS];
+
+	if (node->type == XML_TEXT_NODE && xmlIsBlankNode(node))
+		return;  // skip whitespace-only text node
+
+	if (node->type == XML_ELEMENT_NODE || node->type == XML_TEXT_NODE || node->type == XML_CDATA_SECTION_NODE || node->type == XML_COMMENT_NODE || node->type == XML_PI_NODE)
+	{
+		nulls[0] = false;
+		values[0] = Int64GetDatum(lookup_xmlNode_id(node)); // id
+
+		nulls[1] = node->parent == NULL || node->parent->type == XML_DOCUMENT_NODE;
+		values[1] = node->parent == NULL || node->parent->type == XML_DOCUMENT_NODE ? (Datum) 0: Int64GetDatum(lookup_xmlNode_id(node->parent)); // parentid
+
+		nulls[2] = false;
+		values[2] = Int32GetDatum(node->type); // nodetype
+
+		if (node->type == XML_TEXT_NODE)
+		{
+			values[3] = PointerGetDatum((VarChar *) cstring_to_text("#text"));
+			nulls[3] = false;
+		}
+		else if (node->type == XML_CDATA_SECTION_NODE)
+		{
+			values[3] = PointerGetDatum((VarChar *) cstring_to_text("#cdata-section"));
+			nulls[3] = false;
+		}
+		else if (node->type == XML_COMMENT_NODE)
+		{
+			values[3] = PointerGetDatum((VarChar *) cstring_to_text("#comment"));
+			nulls[3] = false;
+		}
+		else
+		{
+			nulls[3] = node->name == NULL;
+			values[3] = node->name == NULL ? (Datum) 0: PointerGetDatum((VarChar *) cstring_to_text((const char *) node->name)); // localname
+		}
+
+		nulls[4] = node->ns == NULL;
+		values[4] = node->ns == NULL ? (Datum) 0: PointerGetDatum((VarChar *) cstring_to_text((const char *) node->ns->prefix)); // prefix
+
+		nulls[5] = node->ns == NULL || node->ns->href == NULL;
+		values[5] = (node->ns == NULL || node->ns->href == NULL) ? (Datum) 0: PointerGetDatum((VarChar *) cstring_to_text((const char *) node->ns->href)); // namespaceuri
+
+		nulls[6] = true; // datatype
+		values[6] = (Datum) 0; // datatype
+
+		nulls[7] = node->prev == NULL;
+		values[7] = node->prev == NULL ? (Datum) 0: Int64GetDatum(lookup_xmlNode_id(node->prev)); // prev
+
+		nulls[8] = node->content == NULL; // text
+		values[8] = node->content == NULL ? (Datum) 0: PointerGetDatum(cstring_to_text((const char *) node->content)); // text
+
+		if (!bms_is_member(DatumGetInt32(values[0]), xml_visited_nodes_set))
+		{
+			tuplestore_putvalues(tupstore, tupdesc, values, nulls);
+			xml_visited_nodes_set = bms_add_member(xml_visited_nodes_set, DatumGetInt32(values[0]));
+		}
+	}
+	else if (node->type == XML_ATTRIBUTE_NODE)
+	{
+		xmlAttrPtr attr = (xmlAttrPtr) node;
+
+		nulls[0] = false;
+		values[0] = Int64GetDatum(lookup_xmlNode_id(node)); // id
+
+		nulls[1] = node->parent == NULL;
+		values[1] = node->parent == NULL ? (Datum) 0: Int64GetDatum(lookup_xmlNode_id(attr->parent)); // parentid
+
+		nulls[2] = false;
+		values[2] = Int32GetDatum(attr->type); // nodetype
+
+		nulls[3] = attr->name == NULL;
+		values[3] = attr->name == NULL ? (Datum) 0: PointerGetDatum((VarChar *) cstring_to_text((const char *) attr->name)); // localname
+
+		nulls[4] = attr->ns == NULL;
+		values[4] = attr->ns == NULL ? (Datum) 0: PointerGetDatum((VarChar *) cstring_to_text((const char *) attr->ns->prefix)); // prefix
+
+		nulls[5] = attr->ns == NULL || attr->ns->href == NULL;
+		values[5] = (attr->ns == NULL || attr->ns->href == NULL) ? (Datum) 0: PointerGetDatum((VarChar *) cstring_to_text((const char *) attr->ns->href)); // namespaceuri
+
+		nulls[6] = true;
+		values[6] = (Datum) 0; // datatype
+
+		nulls[7] = true;
+		values[7] = (Datum) 0; // prev
+
+		nulls[8] = true;
+		values[8] = (Datum) 0; // text
+
+		if (!bms_is_member(DatumGetInt32(values[0]), xml_visited_nodes_set))
+		{
+			tuplestore_putvalues(tupstore, tupdesc, values, nulls);
+			xml_visited_nodes_set = bms_add_member(xml_visited_nodes_set, DatumGetInt32(values[0]));
+		}
+	}
+
+	if (node->type == XML_ELEMENT_NODE)
+	{
+		for (xmlAttr *cur = node->properties; cur != NULL; cur = cur->next)
+		{
+			add_node_details(tupstore, tupdesc, (xmlNodePtr) cur, xml_visited_nodes_set);
+		}
+
+		for (xmlNodePtr cur = node->children; cur != NULL; cur = cur->next)
+		{
+			add_node_details(tupstore, tupdesc, cur, xml_visited_nodes_set);		
+		}
+	}
+	else if (node->type == XML_DOCUMENT_NODE || node->type == XML_ATTRIBUTE_NODE || node->type == XML_ENTITY_NODE || node->type == XML_ENTITY_REF_NODE || node->type == XML_ENTITY_DECL)
+	{
+		for (xmlNodePtr cur = node->children; cur != NULL; cur = cur->next)
+		{
+			add_node_details(tupstore, tupdesc, cur, xml_visited_nodes_set);		
+		}		
+	}
+}
+
+Datum
+openxml_simple(PG_FUNCTION_ARGS)
+{
+    int        idoc = PG_GETARG_INT32(0);
+    text      *xpath_expr_text = PG_GETARG_TEXT_PP(1);
+ /* int        flags = PG_GETARG_INT32(2); */
+    xmltype   *xmldata;
+    xmltype   *ns_data;
+    char	 **ns_names;
+    char	 **ns_uris;
+	int        ns_count;
+
+	ReturnSetInfo *rsinfo = (ReturnSetInfo *) fcinfo->resultinfo;
+	TupleDesc	tupdesc;
+	Tuplestorestate *tupstore;
+	MemoryContext per_query_ctx;
+	MemoryContext oldcontext;
+
+	PgXmlErrorContext *xmlerrcxt;
+	volatile xmlParserCtxtPtr ctxt = NULL;
+	volatile xmlDocPtr doc = NULL;
+	volatile xmlXPathContextPtr xpathctx = NULL;
+	volatile xmlXPathCompExprPtr xpathcomp = NULL;
+	volatile xmlXPathObjectPtr xpathobj = NULL;
+	char	   *datastr;
+	int32		len;
+	int32		xpath_len;
+	xmlChar    *string;
+	xmlChar    *xpath_expr;
+	size_t		xmldecl_len = 0;
+	Oid			bigint_oid = (*common_utility_plugin_ptr->lookup_tsql_datatype_oid) ("bigint");
+	Oid			int_oid = (*common_utility_plugin_ptr->lookup_tsql_datatype_oid) ("int");
+	Oid         nvarchar_oid = (*common_utility_plugin_ptr->lookup_tsql_datatype_oid) ("nvarchar");
+	Oid         ntext_oid = (*common_utility_plugin_ptr->lookup_tsql_datatype_oid) ("ntext");
+
+	/* check to see if caller supports us returning a tuplestore */
+	if (rsinfo == NULL || !IsA(rsinfo, ReturnSetInfo))
+		ereport(ERROR,
+				(errcode(ERRCODE_FEATURE_NOT_SUPPORTED),
+				 errmsg("set-valued function called in context that cannot accept a set")));
+	if (!(rsinfo->allowedModes & SFRM_Materialize))
+		ereport(ERROR,
+				(errcode(ERRCODE_FEATURE_NOT_SUPPORTED),
+				 errmsg("materialize mode required, but it is not " \
+						"allowed in this context")));
+
+	/* build tupdesc for result tuples. */
+	tupdesc = CreateTemplateTupleDesc(TSQL_OPENXML_EDGE_TABLE_COLS);
+	TupleDescInitEntry(tupdesc, (AttrNumber) 1, "id", bigint_oid, -1, 0);
+	TupleDescInitEntry(tupdesc, (AttrNumber) 2, "parentid", bigint_oid, -1, 0);
+	TupleDescInitEntry(tupdesc, (AttrNumber) 3, "nodetype", int_oid, 32, 0);
+	TupleDescInitEntry(tupdesc, (AttrNumber) 4, "localname", nvarchar_oid, 128, 0);
+	TupleDescInitEntry(tupdesc, (AttrNumber) 5, "prefix", nvarchar_oid, -1, 0);
+	TupleDescInitEntry(tupdesc, (AttrNumber) 6, "namespaceuri", nvarchar_oid, -1, 0);
+	TupleDescInitEntry(tupdesc, (AttrNumber) 7, "datatype", nvarchar_oid, -1, 0);
+	TupleDescInitEntry(tupdesc, (AttrNumber) 8, "prev", bigint_oid, -1, 0);
+	TupleDescInitEntry(tupdesc, (AttrNumber) 9, "text", ntext_oid, -1, 0);
+	tupdesc = BlessTupleDesc(tupdesc);
+
+	per_query_ctx = rsinfo->econtext->ecxt_per_query_memory;
+	oldcontext = MemoryContextSwitchTo(per_query_ctx);
+
+	tupstore = tuplestore_begin_heap(true, false, work_mem);
+
+	MemoryContextSwitchTo(oldcontext);
+
+    /*
+     * Using idoc fetch the xml document and namespaces list from 
+     * xml_handle_temp_table which is used to store the xml handles created
+     * using sp_xml_preparedocument.
+     */
+    get_xml_data_and_namespace_data(idoc, &xmldata, &ns_data);
+    extract_namespaces_from_xml(ns_data, &ns_names, &ns_uris, &ns_count);
+
+	datastr = VARDATA(xmldata);
+	len = VARSIZE(xmldata) - VARHDRSZ;
+	xpath_len = VARSIZE_ANY_EXHDR(xpath_expr_text);
+	if (xpath_len == 0)
+		ereport(ERROR,
+				(errcode(ERRCODE_DATA_EXCEPTION),
+				 errmsg("empty XPath expression")));
+
+	string = pg_xmlCharStrndup_wrapper(datastr, len);
+	xpath_expr = pg_xmlCharStrndup_wrapper(VARDATA_ANY(xpath_expr_text), xpath_len);
+
+	/*
+	 * In a UTF8 database, skip any xml declaration, which might assert
+	 * another encoding.  Ignore parse_xml_decl_wrapper() failure, letting
+	 * xmlCtxtReadMemory() report parse errors.
+	 */
+	if (GetDatabaseEncoding() == PG_UTF8)
+		parse_xml_decl_wrapper((xmlChar *) string, &xmldecl_len, NULL, NULL, NULL);
+
+	xmlerrcxt = pg_xml_init(PG_XML_STRICTNESS_ALL);
+
+	PG_TRY();
+	{
+		xmlInitParser();
+
+		ctxt = xmlNewParserCtxt();
+		if (ctxt == NULL || xmlerrcxt->err_occurred)
+			xml_ereport(xmlerrcxt, ERROR, ERRCODE_OUT_OF_MEMORY,
+						"could not allocate parser context");
+		doc = xmlCtxtReadMemory(ctxt, (char *) string + xmldecl_len,
+								len - xmldecl_len, NULL, NULL, XML_PARSE_NOBLANKS);
+		if (doc == NULL || xmlerrcxt->err_occurred)
+			xml_ereport(xmlerrcxt, ERROR, ERRCODE_INVALID_XML_DOCUMENT,
+						"could not parse XML document");
+		xpathctx = xmlXPathNewContext(doc);
+		if (xpathctx == NULL || xmlerrcxt->err_occurred)
+			xml_ereport(xmlerrcxt, ERROR, ERRCODE_OUT_OF_MEMORY,
+						"could not allocate XPath context");
+		xpathctx->node = (xmlNodePtr) doc;
+
+		/* Initialize the hash table to store xml node pointer to id mapping */
+		assign_ids(doc);
+
+		/* register namespaces, if any */
+		if (ns_count > 0)
+		{
+			for (int i = 0; i < ns_count; i++)
+			{
+				char	   *ns_name;
+				char	   *ns_uri;
+
+				if (ns_names[i] == NULL || ns_uris[i] == NULL)
+					ereport(ERROR,
+							(errcode(ERRCODE_NULL_VALUE_NOT_ALLOWED),
+							 errmsg("neither namespace name nor URI may be null")));
+				ns_name = ns_names[i];
+				ns_uri = ns_uris[i];
+				if (xmlXPathRegisterNs(xpathctx,
+									   (xmlChar *) ns_name,
+									   (xmlChar *) ns_uri) != 0)
+					ereport(ERROR,	/* is this an internal error??? */
+							(errmsg("could not register XML namespace with name \"%s\" and URI \"%s\"",
+									ns_name, ns_uri)));
+			}
+		}
+
+		xpathcomp = xmlXPathCtxtCompile(xpathctx, xpath_expr);
+		if (xpathcomp == NULL || xmlerrcxt->err_occurred)
+			xml_ereport(xmlerrcxt, ERROR, ERRCODE_INTERNAL_ERROR,
+						"invalid XPath expression");
+
+		xpathobj = xmlXPathCompiledEval(xpathcomp, xpathctx);
+		if (xpathobj == NULL || xmlerrcxt->err_occurred)
+			xml_ereport(xmlerrcxt, ERROR, ERRCODE_INTERNAL_ERROR,
+						"could not create XPath object");
+
+		if (xpathobj->type == XPATH_NODESET)
+		{
+			if (xpathobj->nodesetval != NULL)
+			{
+				xmlNodePtr	node;
+				int			num_rows;
+				Bitmapset  *xml_visited_nodes_set = NULL;
+				
+				num_rows = xpathobj->nodesetval->nodeNr;
+				for (int i = 0; i < num_rows; i++)
+				{
+					node = xpathobj->nodesetval->nodeTab[i];
+					add_node_details(tupstore, tupdesc, node, xml_visited_nodes_set);
+				}
+				bms_free(xml_visited_nodes_set);
+				xml_visited_nodes_set = NULL;
+			}
+		}
+    }
+	PG_CATCH();
+	{
+		if (xpathobj)
+			xmlXPathFreeObject(xpathobj);
+		if (xpathcomp)
+			xmlXPathFreeCompExpr(xpathcomp);
+		if (xpathctx)
+			xmlXPathFreeContext(xpathctx);
+		if (doc)
+			xmlFreeDoc(doc);
+		if (ctxt)
+			xmlFreeParserCtxt(ctxt);
+
+		pg_xml_done(xmlerrcxt, true);
+
+		PG_RE_THROW();
+	}
+	PG_END_TRY();
+
+	xmlXPathFreeObject(xpathobj);
+	xmlXPathFreeCompExpr(xpathcomp);
+	xmlXPathFreeContext(xpathctx);
+	xmlFreeDoc(doc);
+	xmlFreeParserCtxt(ctxt);
+
+	pg_xml_done(xmlerrcxt, false);
+
+  	/* clean up and return the tuplestore */
+	tuplestore_donestoring(tupstore);
+
+	rsinfo->returnMode = SFRM_Materialize;
+	rsinfo->setResult = tupstore;
+	rsinfo->setDesc = tupdesc;
+
+	PG_RETURN_NULL();
+}
+

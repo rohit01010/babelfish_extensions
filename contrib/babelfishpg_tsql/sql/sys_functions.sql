@@ -5053,3 +5053,19 @@ CREATE OR REPLACE AGGREGATE sys.string_agg(TEXT, TEXT) (
 CREATE OR REPLACE FUNCTION sys.pltsql_assign_var(dno INT, val ANYELEMENT)
 RETURNS ANYELEMENT
 AS 'babelfishpg_tsql', 'pltsql_assign_var' LANGUAGE C PARALLEL UNSAFE;
+
+CREATE OR REPLACE FUNCTION sys.openxml_simple(idoc INT, 
+                                       rowpattern TEXT, 
+                                       flags INTEGER DEFAULT 0)
+RETURNS table (
+  id sys.BIGINT,
+  parentid sys.BIGINT,
+  nodetype sys.INT,
+  localname sys.NVARCHAR,
+  prefix sys.NVARCHAR,
+  namespaceuri sys.NVARCHAR,
+  datatype sys.NVARCHAR,
+  prev sys.BIGINT,
+  text sys.NTEXT
+) AS 'babelfishpg_tsql', 'openxml_simple' LANGUAGE C STABLE;
+
