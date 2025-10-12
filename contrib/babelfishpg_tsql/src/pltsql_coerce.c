@@ -530,6 +530,9 @@ tsql_find_coercion_pathway(Oid sourceTypeId, Oid targetTypeId, CoercionContext c
 	Oid			UDT_sourceBaseType = InvalidOid;
 	Oid			UDT_targetBaseType = InvalidOid;
 
+	if (sourceTypeId == UNKNOWNOID)
+		return COERCION_PATH_COERCEVIAIO;
+
 	for (int i = 0; i < 2; i++)
 	{
 		tuple = SearchSysCache1(TYPEOID, ObjectIdGetDatum(typeIds[i]));
