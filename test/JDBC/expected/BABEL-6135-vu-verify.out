@@ -1,0 +1,840 @@
+SELECT CAST('1' AS CHAR(10)) AS Col1 
+UNION ALL 
+SELECT NULL AS Col1 
+GO
+~~START~~
+char
+1         
+<NULL>
+~~END~~
+
+
+SELECT CAST('1' AS CHAR(10)) AS Col1 
+UNION ALL 
+SELECT NULL AS Col1 
+GROUP BY Col1
+GO
+~~START~~
+char
+1         
+<NULL>
+~~END~~
+
+
+SELECT CAST('1' AS CHAR(10)) AS Col1 
+UNION ALL 
+SELECT NULL AS Col1 
+ORDER BY Col1 
+GO
+~~START~~
+char
+<NULL>
+1         
+~~END~~
+
+
+SELECT CAST('2023-06-20 12:34:56.789 +01:00' AS DATETIMEOFFSET) AS Result 
+UNION ALL 
+SELECT NULL
+GO
+~~START~~
+datetimeoffset
+2023-06-20 12:34:56.7890000 +01:00
+<NULL>
+~~END~~
+
+SELECT CAST('2023-06-20 12:34:56.789 +01:00' AS DATETIMEOFFSET) AS Result 
+UNION ALL 
+SELECT '2023-06-20 14:30:00 -07:00' 
+GO
+~~START~~
+datetimeoffset
+2023-06-20 12:34:56.7890000 +01:00
+2023-06-20 14:30:00.0000000 -07:00
+~~END~~
+
+SELECT CAST('2023-06-20 12:34:56.789 +01:00' AS DATETIMEOFFSET) AS Result 
+UNION ALL 
+SELECT CAST('2023-06-20 14:30:00 -07:00'  AS VARCHAR(MAX))
+GO
+~~START~~
+datetimeoffset
+2023-06-20 12:34:56.7890000 +01:00
+2023-06-20 14:30:00.0000000 -07:00
+~~END~~
+
+
+SELECT CAST('2023-06-20 12:34:56.789 +01:00' AS DATE) AS Result
+UNION ALL
+SELECT NULL
+GO
+~~START~~
+date
+2023-06-20
+<NULL>
+~~END~~
+
+SELECT CAST('2023-06-20 12:34:56.789 +01:00' AS DATE) AS Result
+UNION ALL
+SELECT '2023-06-20 14:30:00 -07:00'
+GO
+~~START~~
+date
+2023-06-20
+2023-06-20
+~~END~~
+
+SELECT CAST('2023-06-20 12:34:56.789 +01:00' AS DATE) AS Result
+UNION ALL
+SELECT CAST('2023-06-20 14:30:00 -07:00' AS VARCHAR(MAX))
+GO
+~~START~~
+date
+2023-06-20
+2023-06-20
+~~END~~
+
+
+SELECT CAST('2023-06-20 12:34:56.789 +01:00' AS TIME) AS Result
+UNION ALL
+SELECT NULL
+GO
+~~START~~
+time
+12:34:56.7890000
+<NULL>
+~~END~~
+
+SELECT CAST('2023-06-20 12:34:56.789 +01:00' AS TIME) AS Result
+UNION ALL
+SELECT '2023-06-20 14:30:00 -07:00'
+GO
+~~START~~
+time
+12:34:56.7890000
+14:30:00.0000000
+~~END~~
+
+SELECT CAST('2023-06-20 12:34:56.789 +01:00' AS TIME) AS Result
+UNION ALL
+SELECT CAST('2023-06-20 14:30:00 -07:00' AS VARCHAR(MAX))
+GO
+~~START~~
+time
+12:34:56.7890000
+14:30:00.0000000
+~~END~~
+
+
+SELECT CAST('2023-06-20 12:34:56.789 +01:00' AS DATETIME2) AS Result
+UNION ALL
+SELECT NULL
+GO
+~~START~~
+datetime2
+2023-06-20 12:34:56.7890000
+<NULL>
+~~END~~
+
+SELECT CAST('2023-06-20 12:34:56.789 +01:00' AS DATETIME2) AS Result
+UNION ALL
+SELECT '2023-06-20 14:30:00 -07:00'
+GO
+~~START~~
+datetime2
+2023-06-20 12:34:56.7890000
+2023-06-20 14:30:00.0000000
+~~END~~
+
+SELECT CAST('2023-06-20 12:34:56.789 +01:00' AS DATETIME2) AS Result
+UNION ALL
+SELECT CAST('2023-06-20 14:30:00 -07:00' AS VARCHAR(MAX))
+GO
+~~START~~
+datetime2
+2023-06-20 12:34:56.7890000
+2023-06-20 14:30:00.0000000
+~~END~~
+
+
+SELECT CAST('2023-06-20 12:34:56.789' AS DATETIME) AS Result
+UNION ALL
+SELECT NULL
+GO
+~~START~~
+datetime
+2023-06-20 12:34:56.79
+<NULL>
+~~END~~
+
+SELECT CAST('2023-06-20 12:34:56.789' AS DATETIME) AS Result
+UNION ALL
+SELECT '2023-06-20 14:30:00'
+GO
+~~START~~
+datetime
+2023-06-20 12:34:56.79
+2023-06-20 14:30:00.0
+~~END~~
+
+SELECT CAST('2023-06-20 12:34:56.789' AS DATETIME) AS Result
+UNION ALL
+SELECT CAST('2023-06-20 14:30:00' AS VARCHAR(MAX))
+GO
+~~START~~
+datetime
+2023-06-20 12:34:56.79
+2023-06-20 14:30:00.0
+~~END~~
+
+
+SELECT CAST('2023-06-20 12:34:56.789' AS SMALLDATETIME) AS Result
+UNION ALL
+SELECT NULL
+GO
+~~START~~
+smalldatetime
+2023-06-20 12:35:00.0
+<NULL>
+~~END~~
+
+SELECT CAST('2023-06-20 12:34:56.789' AS SMALLDATETIME) AS Result
+UNION ALL
+SELECT '2023-06-20 14:30:00'
+GO
+~~START~~
+smalldatetime
+2023-06-20 12:35:00.0
+2023-06-20 14:30:00.0
+~~END~~
+
+SELECT CAST('2023-06-20 12:34:56.789' AS SMALLDATETIME) AS Result
+UNION ALL
+SELECT CAST('2023-06-20 14:30:00' AS VARCHAR(MAX))
+GO
+~~START~~
+smalldatetime
+2023-06-20 12:35:00.0
+2023-06-20 14:30:00.0
+~~END~~
+
+
+SELECT CAST('123' AS INT) AS Result
+UNION ALL
+SELECT NULL
+GO
+~~START~~
+int
+123
+<NULL>
+~~END~~
+
+SELECT CAST('123' AS INT) AS Result
+UNION ALL
+SELECT '456'
+GO
+~~START~~
+int
+123
+456
+~~END~~
+
+SELECT CAST('123' AS INT) AS Result
+UNION ALL
+SELECT CAST('456' AS VARCHAR(MAX))
+GO
+~~START~~
+int
+123
+456
+~~END~~
+
+
+SELECT CAST('123' AS BIGINT) AS Result
+UNION ALL
+SELECT NULL
+GO
+~~START~~
+bigint
+123
+<NULL>
+~~END~~
+
+SELECT CAST('123' AS BIGINT) AS Result
+UNION ALL
+SELECT '456'
+GO
+~~START~~
+bigint
+123
+456
+~~END~~
+
+SELECT CAST('123' AS BIGINT) AS Result
+UNION ALL
+SELECT CAST('456' AS VARCHAR(MAX))
+GO
+~~START~~
+bigint
+123
+456
+~~END~~
+
+
+SELECT CAST('123' AS SMALLINT) AS Result
+UNION ALL
+SELECT NULL
+GO
+~~START~~
+smallint
+123
+<NULL>
+~~END~~
+
+SELECT CAST('123' AS SMALLINT) AS Result
+UNION ALL
+SELECT '456'
+GO
+~~START~~
+smallint
+123
+456
+~~END~~
+
+SELECT CAST('123' AS SMALLINT) AS Result
+UNION ALL
+SELECT CAST('456' AS VARCHAR(MAX))
+GO
+~~START~~
+smallint
+123
+456
+~~END~~
+
+
+SELECT CAST('7' AS TINYINT) AS Result
+UNION ALL
+SELECT NULL
+GO
+~~START~~
+tinyint
+7
+<NULL>
+~~END~~
+
+SELECT CAST('7' AS TINYINT) AS Result
+UNION ALL
+SELECT '8'
+GO
+~~START~~
+tinyint
+7
+8
+~~END~~
+
+SELECT CAST('7' AS TINYINT) AS Result
+UNION ALL
+SELECT CAST('8' AS VARCHAR(MAX))
+GO
+~~START~~
+tinyint
+7
+8
+~~END~~
+
+
+SELECT CAST('123' AS NUMERIC) AS Result
+UNION ALL
+SELECT NULL
+GO
+~~START~~
+numeric
+123
+<NULL>
+~~END~~
+
+SELECT CAST('123' AS NUMERIC) AS Result
+UNION ALL
+SELECT '456'
+GO
+~~START~~
+numeric
+123
+456
+~~END~~
+
+SELECT CAST('123' AS NUMERIC) AS Result
+UNION ALL
+SELECT CAST('456' AS VARCHAR(MAX))
+GO
+~~START~~
+numeric
+123
+456
+~~END~~
+
+
+SELECT CAST('123' AS DECIMAL) AS Result
+UNION ALL
+SELECT NULL
+GO
+~~START~~
+numeric
+123
+<NULL>
+~~END~~
+
+SELECT CAST('123' AS DECIMAL) AS Result
+UNION ALL
+SELECT '456'
+GO
+~~START~~
+numeric
+123
+456
+~~END~~
+
+SELECT CAST('123' AS DECIMAL) AS Result
+UNION ALL
+SELECT CAST('456' AS VARCHAR(MAX))
+GO
+~~START~~
+numeric
+123
+456
+~~END~~
+
+
+SELECT CAST('123' AS FLOAT) AS Result
+UNION ALL
+SELECT NULL
+GO
+~~START~~
+float
+123.0
+<NULL>
+~~END~~
+
+SELECT CAST('123' AS FLOAT) AS Result
+UNION ALL
+SELECT '456'
+GO
+~~START~~
+float
+123.0
+456.0
+~~END~~
+
+SELECT CAST('123' AS FLOAT) AS Result
+UNION ALL
+SELECT CAST('456' AS VARCHAR(MAX))
+GO
+~~START~~
+float
+123.0
+456.0
+~~END~~
+
+
+SELECT CAST('123' AS REAL) AS Result
+UNION ALL
+SELECT NULL
+GO
+~~START~~
+real
+123.0
+<NULL>
+~~END~~
+
+SELECT CAST('123' AS REAL) AS Result
+UNION ALL
+SELECT '456'
+GO
+~~START~~
+real
+123.0
+456.0
+~~END~~
+
+SELECT CAST('123' AS REAL) AS Result
+UNION ALL
+SELECT CAST('456' AS VARCHAR(MAX))
+GO
+~~START~~
+real
+123.0
+456.0
+~~END~~
+
+
+SELECT CAST('1' AS BIT) AS Result
+UNION ALL
+SELECT NULL
+GO
+~~START~~
+bit
+1
+<NULL>
+~~END~~
+
+SELECT CAST('1' AS BIT) AS Result
+UNION ALL
+SELECT '0'
+GO
+~~START~~
+bit
+1
+0
+~~END~~
+
+SELECT CAST('1' AS BIT) AS Result
+UNION ALL
+SELECT CAST('0' AS VARCHAR(MAX))
+GO
+~~START~~
+bit
+1
+0
+~~END~~
+
+
+SELECT CAST('123' AS MONEY) AS Result
+UNION ALL
+SELECT NULL
+GO
+~~START~~
+money
+123.0000
+<NULL>
+~~END~~
+
+SELECT CAST('123' AS MONEY) AS Result
+UNION ALL
+SELECT '456'
+GO
+~~START~~
+money
+123.0000
+456.0000
+~~END~~
+
+SELECT CAST('123' AS MONEY) AS Result
+UNION ALL
+SELECT CAST('456' AS VARCHAR(MAX))
+GO
+~~START~~
+money
+123.0000
+456.0000
+~~END~~
+
+
+SELECT CAST('123' AS SMALLMONEY) AS Result
+UNION ALL
+SELECT NULL
+GO
+~~START~~
+smallmoney
+123.0000
+<NULL>
+~~END~~
+
+SELECT CAST('123' AS SMALLMONEY) AS Result
+UNION ALL
+SELECT '456'
+GO
+~~START~~
+smallmoney
+123.0000
+456.0000
+~~END~~
+
+SELECT CAST('123' AS SMALLMONEY) AS Result
+UNION ALL
+SELECT CAST('456' AS VARCHAR(MAX))
+GO
+~~START~~
+smallmoney
+123.0000
+456.0000
+~~END~~
+
+
+SELECT CAST('123' AS VARBINARY) AS Result
+UNION ALL
+SELECT NULL
+GO
+~~START~~
+varbinary
+313233
+<NULL>
+~~END~~
+
+SELECT CAST('123' AS VARBINARY) AS Result
+UNION ALL
+SELECT '456'
+GO
+~~START~~
+varchar
+123
+456
+~~END~~
+
+SELECT CAST('123' AS VARBINARY) AS Result
+UNION ALL
+SELECT CAST('456' AS VARCHAR(MAX))
+GO
+~~START~~
+varchar
+123
+456
+~~END~~
+
+
+SELECT CAST('123' AS BINARY) AS Result
+UNION ALL
+SELECT NULL
+GO
+~~START~~
+binary
+313233000000000000000000000000000000000000000000000000000000
+<NULL>
+~~END~~
+
+SELECT CAST('123' AS BINARY) AS Result
+UNION ALL
+SELECT '456'
+GO
+~~START~~
+varchar
+123
+456
+~~END~~
+
+SELECT CAST('123' AS BINARY) AS Result
+UNION ALL
+SELECT CAST('456' AS VARCHAR(MAX))
+GO
+~~START~~
+varchar
+123
+456
+~~END~~
+
+
+SELECT CAST('123' AS IMAGE) AS Result
+UNION ALL
+SELECT NULL
+GO
+~~START~~
+image
+313233
+<NULL>
+~~END~~
+
+SELECT CAST('123' AS IMAGE) AS Result
+UNION ALL
+SELECT '456'
+GO
+~~START~~
+varchar
+123
+456
+~~END~~
+
+SELECT CAST('123' AS IMAGE) AS Result
+UNION ALL
+SELECT CAST('456' AS VARCHAR(MAX))
+GO
+~~START~~
+varchar
+123
+456
+~~END~~
+
+
+SELECT CAST('123' AS TEXT) AS Result
+UNION ALL
+SELECT NULL
+GO
+~~START~~
+text
+123
+<NULL>
+~~END~~
+
+SELECT CAST('123' AS TEXT) AS Result
+UNION ALL
+SELECT '456'
+GO
+~~START~~
+text
+123
+456
+~~END~~
+
+SELECT CAST('123' AS TEXT) AS Result
+UNION ALL
+SELECT CAST('456' AS VARCHAR(MAX))
+GO
+~~START~~
+text
+123
+456
+~~END~~
+
+
+SELECT CAST('123' AS NTEXT) AS Result
+UNION ALL
+SELECT NULL
+GO
+~~START~~
+ntext
+123
+<NULL>
+~~END~~
+
+SELECT CAST('123' AS NTEXT) AS Result
+UNION ALL
+SELECT '456'
+GO
+~~START~~
+ntext
+123
+456
+~~END~~
+
+SELECT CAST('123' AS NTEXT) AS Result
+UNION ALL
+SELECT CAST('456' AS VARCHAR(MAX))
+GO
+~~START~~
+ntext
+123
+456
+~~END~~
+
+
+SELECT CAST('123' AS CHAR) AS Result
+UNION ALL
+SELECT NULL
+GO
+~~START~~
+char
+123                           
+<NULL>
+~~END~~
+
+SELECT CAST('123' AS CHAR) AS Result
+UNION ALL
+SELECT '456'
+GO
+~~START~~
+varchar
+123                           
+456
+~~END~~
+
+SELECT CAST('123' AS CHAR) AS Result
+UNION ALL
+SELECT CAST('456' AS VARCHAR(MAX))
+GO
+~~START~~
+varchar
+123                           
+456
+~~END~~
+
+
+SELECT CAST('123' AS VARCHAR) AS Result
+UNION ALL
+SELECT NULL
+GO
+~~START~~
+varchar
+123
+<NULL>
+~~END~~
+
+SELECT CAST('123' AS VARCHAR) AS Result
+UNION ALL
+SELECT '456'
+GO
+~~START~~
+varchar
+123
+456
+~~END~~
+
+SELECT CAST('123' AS VARCHAR) AS Result
+UNION ALL
+SELECT CAST('456' AS VARCHAR(MAX))
+GO
+~~START~~
+varchar
+123
+456
+~~END~~
+
+
+SELECT CAST('123' AS NCHAR) AS Result
+UNION ALL
+SELECT NULL
+GO
+~~START~~
+nchar
+123                           
+<NULL>
+~~END~~
+
+SELECT CAST('123' AS NCHAR) AS Result
+UNION ALL
+SELECT '456'
+GO
+~~START~~
+nchar
+123                           
+456                           
+~~END~~
+
+SELECT CAST('123' AS NCHAR) AS Result
+UNION ALL
+SELECT CAST('456' AS VARCHAR(MAX))
+GO
+~~START~~
+nchar
+123                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+456                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+~~END~~
+
+
+SELECT CAST('123' AS NVARCHAR) AS Result
+UNION ALL
+SELECT NULL
+GO
+~~START~~
+nvarchar
+123
+<NULL>
+~~END~~
+
+SELECT CAST('123' AS NVARCHAR) AS Result
+UNION ALL
+SELECT '456'
+GO
+~~START~~
+nvarchar
+123
+456
+~~END~~
+
+SELECT CAST('123' AS NVARCHAR) AS Result
+UNION ALL
+SELECT CAST('456' AS VARCHAR(MAX))
+GO
+~~START~~
+nvarchar
+123
+456
+~~END~~
+
