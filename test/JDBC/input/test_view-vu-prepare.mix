@@ -6,5 +6,5 @@ select column_name, data_type from information_schema.columns where table_name l
 GO
 
 -- psql
-select attrelid, attname, atttypid::regtype::text from pg_attribute where attrelid::regclass::text like '%sp_special_columns_view%';
+select attrelid::regclass::text, attname, atttypid::regtype::text from pg_attribute where attrelid::regclass::text like '%sp_special_columns_view%';
 GO

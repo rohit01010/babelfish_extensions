@@ -11,25 +11,25 @@ result#!#varchar
 
 
 -- psql
-select attrelid, attname, atttypid::regtype::text from pg_attribute where attrelid::regclass::text like '%sp_special_columns_view%';
+select attrelid::regclass::text, attname, atttypid::regtype::text from pg_attribute where attrelid::regclass::text like '%sp_special_columns_view%';
 GO
 ~~START~~
-oid#!#name#!#text
-19890#!#scope#!#smallint
-19890#!#column_name#!#sys.sysname
-19890#!#data_type#!#smallint
-19890#!#type_name#!#sys.sysname
-19890#!#precision#!#integer
-19890#!#length#!#integer
-19890#!#scale#!#smallint
-19890#!#pseudo_column#!#smallint
-19890#!#is_nullable#!#integer
-19890#!#table_qualifier#!#sys.sysname
-19890#!#table_owner#!#sys.sysname
-19890#!#table_name#!#sys.sysname
-19890#!#constraint_type#!#sys.sysname
-19890#!#constraint_name#!#sys.sysname
-19890#!#index_id#!#integer
-85695#!#result#!#sys."varchar"
+text#!#name#!#text
+master_dbo.my_sp_special_columns_view#!#result#!#sys."varchar"
+sys.sp_special_columns_view#!#scope#!#smallint
+sys.sp_special_columns_view#!#column_name#!#sys.sysname
+sys.sp_special_columns_view#!#data_type#!#smallint
+sys.sp_special_columns_view#!#type_name#!#sys.sysname
+sys.sp_special_columns_view#!#precision#!#integer
+sys.sp_special_columns_view#!#length#!#integer
+sys.sp_special_columns_view#!#scale#!#smallint
+sys.sp_special_columns_view#!#pseudo_column#!#smallint
+sys.sp_special_columns_view#!#is_nullable#!#integer
+sys.sp_special_columns_view#!#table_qualifier#!#sys.sysname
+sys.sp_special_columns_view#!#table_owner#!#sys.sysname
+sys.sp_special_columns_view#!#table_name#!#sys.sysname
+sys.sp_special_columns_view#!#constraint_type#!#sys.sysname
+sys.sp_special_columns_view#!#constraint_name#!#sys.sysname
+sys.sp_special_columns_view#!#index_id#!#integer
 ~~END~~
 
