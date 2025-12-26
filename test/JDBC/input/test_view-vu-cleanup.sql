@@ -1,0 +1,2 @@
+DROP VIEW my_sp_special_columns_view
+GO

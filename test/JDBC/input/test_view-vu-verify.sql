@@ -1,0 +1,5 @@
+select column_name, data_type from information_schema.columns where table_name like '%my_sp_special_columns_view%';
+GO
+
+select top 1 cast(pg_typeof(type_name) as varchar(100)) from sys.sp_special_columns_view;
+GO
