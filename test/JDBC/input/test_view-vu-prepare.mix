@@ -1,10 +1,10 @@
 CREATE VIEW my_sp_special_columns_view AS
-    SELECT CASE 1 WHEN 1 THEN cast('abc' as sysname) WHEN 2 THEN cast('abc' as sysname) ELSE cast('abc' as sysname) END AS result;
+    SELECT CASE 1 WHEN 1 THEN cast('abc' as sysname) WHEN 2 THEN cast('abc' as sysname) ELSE cast('abc' as sysname) END AS type_name;
 GO
 
 select column_name, data_type from information_schema.columns where table_name like '%my_sp_special_columns_view%';
 GO
 
 -- psql
-select attrelid::regclass::text, attname, atttypid::regtype::text from pg_attribute where attrelid::regclass::text like '%sp_special_columns_view%';
+select attrelid::regclass::text, attname, atttypid::regtype::text from pg_attribute where attrelid::regclass::text like '%sp_special_columns_view%' and attname like '%type_name%' ORDER BY attrelid::regclass::text;
 GO

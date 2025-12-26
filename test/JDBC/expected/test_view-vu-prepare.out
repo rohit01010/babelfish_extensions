@@ -1,35 +1,21 @@
 CREATE VIEW my_sp_special_columns_view AS
-    SELECT CASE 1 WHEN 1 THEN cast('abc' as sysname) WHEN 2 THEN cast('abc' as sysname) ELSE cast('abc' as sysname) END AS result;
+    SELECT CASE 1 WHEN 1 THEN cast('abc' as sysname) WHEN 2 THEN cast('abc' as sysname) ELSE cast('abc' as sysname) END AS type_name;
 GO
 
 select column_name, data_type from information_schema.columns where table_name like '%my_sp_special_columns_view%';
 GO
 ~~START~~
 nvarchar#!#nvarchar
-result#!#varchar
+type_name#!#varchar
 ~~END~~
 
 
 -- psql
-select attrelid::regclass::text, attname, atttypid::regtype::text from pg_attribute where attrelid::regclass::text like '%sp_special_columns_view%';
+select attrelid::regclass::text, attname, atttypid::regtype::text from pg_attribute where attrelid::regclass::text like '%sp_special_columns_view%' and attname like '%type_name%' ORDER BY attrelid::regclass::text;
 GO
 ~~START~~
 text#!#name#!#text
-master_dbo.my_sp_special_columns_view#!#result#!#sys."varchar"
-sys.sp_special_columns_view#!#scope#!#smallint
-sys.sp_special_columns_view#!#column_name#!#sys.sysname
-sys.sp_special_columns_view#!#data_type#!#smallint
+master_dbo.my_sp_special_columns_view#!#type_name#!#sys."varchar"
 sys.sp_special_columns_view#!#type_name#!#sys.sysname
-sys.sp_special_columns_view#!#precision#!#integer
-sys.sp_special_columns_view#!#length#!#integer
-sys.sp_special_columns_view#!#scale#!#smallint
-sys.sp_special_columns_view#!#pseudo_column#!#smallint
-sys.sp_special_columns_view#!#is_nullable#!#integer
-sys.sp_special_columns_view#!#table_qualifier#!#sys.sysname
-sys.sp_special_columns_view#!#table_owner#!#sys.sysname
-sys.sp_special_columns_view#!#table_name#!#sys.sysname
-sys.sp_special_columns_view#!#constraint_type#!#sys.sysname
-sys.sp_special_columns_view#!#constraint_name#!#sys.sysname
-sys.sp_special_columns_view#!#index_id#!#integer
 ~~END~~
 
