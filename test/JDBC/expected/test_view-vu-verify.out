@@ -6,10 +6,26 @@ result#!#varchar
 ~~END~~
 
 
-select top 1 cast(pg_typeof(type_name) as varchar(100)) from sys.sp_special_columns_view;
+-- psql
+select attrelid, attname, atttypid::regtype::text from pg_attribute where attrelid::regclass::text like '%sp_special_columns_view%';
 GO
 ~~START~~
-varchar
-sysname
+oid#!#name#!#text
+19890#!#scope#!#smallint
+19890#!#column_name#!#sys.sysname
+19890#!#data_type#!#smallint
+19890#!#type_name#!#sys.sysname
+19890#!#precision#!#integer
+19890#!#length#!#integer
+19890#!#scale#!#smallint
+19890#!#pseudo_column#!#smallint
+19890#!#is_nullable#!#integer
+19890#!#table_qualifier#!#sys.sysname
+19890#!#table_owner#!#sys.sysname
+19890#!#table_name#!#sys.sysname
+19890#!#constraint_type#!#sys.sysname
+19890#!#constraint_name#!#sys.sysname
+19890#!#index_id#!#integer
+85695#!#result#!#sys."varchar"
 ~~END~~
 
