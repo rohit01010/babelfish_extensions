@@ -1,5 +1,8 @@
 -- single_db_mode_expected
 -- sla 60000
+SET BABELFISH_STATISTICS PROFILE ON
+GO
+
 CREATE TABLE fpn_table (a int, b varchar(10))
 GO
 
@@ -241,4 +244,7 @@ DROP TABLE fpn_table
 DROP VIEW four_part_names_vu_verify_view
 DROP PROCEDURE fpn_vu_prepare__fpn_proc
 DROP FUNCTION fpn_vu_prepare__fpn_func()
+GO
+
+SET BABELFISH_STATISTICS PROFILE ON
 GO
